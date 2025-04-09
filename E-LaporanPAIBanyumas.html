@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>E-Laporan Penyuluh Agama Banyumas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+      color: #000;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: background 0.3s;
+    }
+
+    .dark-mode .container {
+      background-color: #1e1e1e;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .dark-mode input,
+    .dark-mode select,
+    .dark-mode textarea {
+      background-color: #2e2e2e;
+      color: #fff;
+      border-color: #444;
+    }
+
+    button {
+        margin-top: 20px;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: #27ae60;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Specific style for Download PDF button */
+button[type="submit"] {
+  background-color: #27ae60;
+  color: white;
+}
+
+button:hover {
+  background-color: transparent;
+  color: #219150;
+}
+
+button[type="submit"]:hover {
+  background-color: #219150;
+  color: white;
+}
+
+/* Toggle button styles remain unchanged */
+.toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  float: right;
+  margin-top: -70px;
+  font-size: 24px;
+  transition: transform 0.3s ease;
+  color: inherit;
+}
+
+.toggle .material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-size: 28px;
+  transition: transform 0.3s ease;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.dark-mode .toggle .material-symbols-outlined {
+  color: #fff;
+  border-color: #555;
+}
+
+    .toggle:hover .material-symbols-outlined {
+      transform: rotate(180deg);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header img {
+      width: 60px;
+      margin-right: 15px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .dark-mode footer {
+      color: #bbb;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-content a {
+      color: #25D366;
+      text-decoration: none;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="https://i.ibb.co/990pWt7G/logo-kemenag-png-1png.png" alt="Logo Kemenag">
+      <h2>Kementerian Agama Republik Indonesia</h2>
+    </div>
+
+    <h1 style="font-size: 20px;">E-Laporan Penyuluh Agama Banyumas</h1>
+
+    <button id="darkModeToggle" class="toggle" aria-label="Toggle Tema">
+      <span id="themeIcon" class="material-symbols-outlined">brightness_7</span>
+    </button>
+
+    <form id="laporanForm">
+      <label>Nama</label>
+      <input type="text" id="nama" required>
+
+      <label>NIPA</label>
+      <input type="text" id="nipa" required>
+
+      <label>Bulan Pelaporan</label>
+      <select id="bulan" required>
+        <option value="Januari">Januari</option>
+        <option value="Februari">Februari</option>
+        <option value="Maret">Maret</option>
+        <option value="April">April</option>
+        <option value="Mei">Mei</option>
+        <option value="Juni">Juni</option>
+        <option value="Juli">Juli</option>
+        <option value="Agustus">Agustus</option>
+        <option value="September">September</option>
+        <option value="Oktober">Oktober</option>
+        <option value="November">November</option>
+        <option value="Desember">Desember</option>
+      </select>
+
+      <label>Tanggal Pelaksanaan</label>
+      <input type="date" id="tanggal" required>
+
+      <label>Materi</label>
+      <input type="text" id="materi" required>
+
+      <label>Kategori</label>
+      <select id="kategori" required>
+        <option value="Fiqh">Fiqh</option>
+        <option value="Akhlaq">Akhlaq</option>
+        <option value="Tauhid">Tauhid</option>
+        <option value="Muamalah">Muamalah</option>
+        <option value="Tarikh">Tarikh</option>
+        <option value="Tajwid">Tajwid</option>
+        <option value="Akidah">Akidah</option>
+        <option value="Qur'an Hadits">Qur'an Hadits</option>
+      </select>
+
+      <label>Jumlah Jamaah</label>
+      <input type="number" id="jamaah" required>
+
+      <label>Nama Kelompok</label>
+      <input type="text" id="kelompok" required>
+
+      <label>Tempat Pelaksanaan</label>
+      <input type="text" id="tempat" required>
+
+      <label>Foto Kegiatan</label>
+      <input type="file" id="foto" accept="image/*">
+
+      <button type="submit">Download PDF</button>
+    </form>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      &copy; 2025 Appandi Project | This website is always under development, for criticism and suggestions please contact me.
+      <a href="https://wa.me/6281915771171" target="_blank" title="Hubungi via WhatsApp">
+        <span class="material-symbols-outlined">chat</span>
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    let fotoBase64 = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("laporanForm");
+      const fotoInput = document.getElementById("foto");
+      const toggle = document.getElementById("darkModeToggle");
+      const icon = document.getElementById("themeIcon");
+
+      function updateIcon() {
+        icon.textContent = document.body.classList.contains("dark-mode")
+          ? "dark_mode"
+          : "brightness_7";
+      }
+
+      toggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        updateIcon();
+      });
+
+      updateIcon();
+
+      fotoInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            fotoBase64 = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        generatePDF();
+      });
+    });
+
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+
+      const nama = document.getElementById("nama").value;
+      const nipa = document.getElementById("nipa").value;
+      const bulan = document.getElementById("bulan").value;
+      const tanggal = document.getElementById("tanggal").value;
+      const materi = document.getElementById("materi").value;
+      const kategori = document.getElementById("kategori").value;
+      const jamaah = document.getElementById("jamaah").value;
+      const kelompok = document.getElementById("kelompok").value;
+      const tempat = document.getElementById("tempat").value;
+
+      let y = 20;
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.text("LAPORAN EPA", 105, y, { align: "center" });
+      y += 10;
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+      pdf.text("PENYULUH AGAMA ISLAM NON PNS", 105, y, { align: "center" });
+      y += 15;
+
+      const data = [
+        ["Nama", nama],
+        ["NIPA", nipa],
+        ["Bulan Pelaporan", bulan],
+        ["Tanggal Pelaksanaan", tanggal],
+        ["Materi", materi],
+        ["Kategori", kategori],
+        ["Jumlah Jamaah", jamaah],
+        ["Nama Kelompok", kelompok],
+        ["Tempat Pelaksanaan", tempat]
+      ];
+
+      data.forEach(([label, value]) => {
+        pdf.text(`${label}`, 20, y);
+        pdf.text(":" , 70, y);
+        pdf.text(`${value}`, 75, y);
+        y += 8;
+      });
+
+      function addTandaTangan(yPos) {
+    const ttdY = yPos + 30;
+
+    // Mengetahui dan Atasan Langsung di sebelah kiri
+    pdf.text("Mengetahui,", 20, ttdY); // Pindah ke sebelah kiri
+    pdf.text("Atasan Langsung", 20, ttdY + 7); // Pindah ke sebelah kiri
+
+    // Penyuluh Agama Islam di sebelah kanan
+    pdf.text("Penyuluh Agama Islam", 140, ttdY); // Tetap di sebelah kanan
+
+    // Nama dan NIP di sebelah kiri
+    pdf.text("H. M. Nastholih, S.Ag., M.Pd.I", 20, ttdY + 25); // Pindah ke sebelah kiri
+    pdf.text("NIP. 19720419 199703 1 003", 20, ttdY + 30); // Pindah ke sebelah kiri
+
+    // SISWANDI di sebelah kanan
+    pdf.text("SISWANDI", 140, ttdY + 25); // Pindah ke sebelah kanan
+}
+
+      function savePDF() {
+        addTandaTangan(y);
+        pdf.save(`Laporan_EPA_${tanggal}.pdf`);
+      }
+
+      if (fotoBase64) {
+        const img = new Image();
+        img.onload = function () {
+          let imgProps = pdf.getImageProperties(fotoBase64);
+          let pdfWidth = 160;
+          let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          if (y + pdfHeight > 240) {
+            pdf.addPage();
+            y = 20;
+          } else {
+            y += 10;
+          }
+
+          pdf.setFont("helvetica", "bold");
+          pdf.text("Foto Kegiatan:", 20, y);
+          y += 5;
+          pdf.setFont("helvetica", "normal");
+          pdf.addImage(fotoBase64, 'JPEG', 20, y, pdfWidth, pdfHeight);
+          y += pdfHeight;
+          savePDF();
+        };
+        img.onerror = savePDF;
+        img.src = fotoBase64;
+      } else {
+        savePDF();
+      }
+    }
+  </script>
+</body>
+</html>
