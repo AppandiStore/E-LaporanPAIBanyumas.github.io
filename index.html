@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-Laporan Penyuluh Agama Banyumas</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <style>
     body {
@@ -150,7 +151,86 @@
       fill: #25D366;
     }
 
-    /* 🔽 Responsive tweaks */
+    /* CSS untuk Dialog Catatan */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .modal {
+      background: white;
+      max-width: 500px;
+      width: 90%;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-20px);
+      animation: slideIn 0.3s ease forwards;
+      position: relative;
+    }
+
+    .dark-mode .modal {
+      background: #1e1e1e;
+      color: #fff;
+    }
+
+    .modal h3 {
+      margin: 0 0 15px;
+      font-size: 22px;
+      color: #27ae60;
+      text-align: center;
+    }
+
+    .dark-mode .modal h3 {
+      color: #4ade80;
+    }
+
+    .modal p {
+      margin: 0 0 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .dark-mode .modal p {
+      color: #ddd;
+    }
+
+    .modal button {
+      display: block;
+      margin: 0 auto;
+      padding: 10px 20px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .modal button:hover {
+      background: #219150;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      to { transform: translateY(0); }
+    }
+
     @media (max-width: 600px) {
       .container {
         padding: 15px;
@@ -178,44 +258,34 @@
       .header h2 {
         font-size: 14px;
       }
+
+      .modal {
+        width: 95%;
+        padding: 15px;
+      }
+
+      .modal h3 {
+        font-size: 18px;
+      }
+
+      .modal p {
+        font-size: 13px;
+      }
     }
-  @media (max-width: 600px) {
-  .container {
-    padding: 15px;
-  }
-
-  h1 {
-    font-size: 18px;
-  }
-
-  .toggle {
-    float: none;
-    display: block;
-    margin: 10px auto;
-  }
-
-  button {
-    width: 100%;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .header img {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
-
-  .header h2 {
-    font-size: 16px;
-  }
-}
-</style>
+  </style>
 </head>
 <body>
+  <!-- Dialog Catatan -->
+  <div id="changelogModal" class="modal-overlay">
+    <div class="modal">
+      <h3>Catatan Perubahan</h3>
+      <p>🚀 ✨ 
+1. Menambahkan fitur Unduh Laporan Saya", fungsinya untuk menyimpan hasil generate laporan panjenengan yang akan disimpan kedalam Google Drive yang sewaktu-waktu bisa didownload tanpa khawatir kehilangan laporan yang sudah jadi. Silahkan klik tombol "Unduh Laporan Saya " kemudian masukan NIPA panjenengan kemudian otomatis file panjenengan akan terunduh
+      </p>
+      <button onclick="closeChangelogModal()">Tutup</button>
+    </div>
+  </div>
+
   <div class="container">
     <div class="header">
       <img src="https://i.ibb.co.com/990pWt7G/logo-kemenag-png-1png.png" alt="Logo Kemenag">
@@ -286,143 +356,314 @@
   </div>
 
   <footer>
-    &copy; 2025 Appandi Project
+    © 2025 Appandi Project
     <a href="https://wa.me/6281915771171" target="_blank">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M16.001 4C9.925 4 5 8.925 5 15.001c0 2.624.855 5.047 2.285 7.015L5 28l6.216-2.242A11.952 11.952 0 0 0 16.001 26C22.075 26 27 21.075 27 15.001 27 8.925 22.075 4 16.001 4zm0 2c5.523 0 10 4.478 10 10.001 0 5.523-4.477 10-10 10-1.885 0-3.642-.55-5.123-1.492l-.358-.226-3.026 1.091 1.064-2.79-.23-.361A9.946 9.946 0 0 1 6 15.001C6 9.478 10.478 6 16.001 6zM9.7 10.965l-.206.004c-.576.02-1.13.506-1.237 1.073-.113.588-.205 1.134.27 2.018.646 1.192 2.195 3.04 4.93 4.334 2.736 1.294 3.474.884 4.068.832.596-.052 1.443-.59 1.654-1.16.211-.57.211-1.055.148-1.16-.063-.105-.23-.168-.484-.29-.254-.122-1.502-.742-1.733-.827-.231-.084-.399-.127-.567.127-.168.253-.653.825-.8.993-.147.168-.294.189-.548.063-.254-.126-1.072-.396-2.04-1.264-.754-.671-1.263-1.5-1.41-1.754-.147-.253-.016-.389.11-.512.113-.11.253-.294.38-.441.126-.147.168-.252.252-.421.084-.168.042-.316-.021-.441-.063-.126-.567-1.362-.775-1.859-.204-.495-.41-.52-.567-.526z"/></svg>
     </a>
     <br>
     <small>This website is always under development, for criticism and suggestions please contact me.</small>
   </footer>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const toggle = document.getElementById("darkModeToggle");
-    const icon = document.getElementById("themeIcon");
 
-    function updateIcon() {
-      icon.textContent = document.body.classList.contains("dark-mode")
-        ? "dark_mode"
-        : "brightness_7";
+  <script>
+    // Konfigurasi Service Account (isi manual)
+    const SERVICE_ACCOUNT = {
+      "type": "service_account",
+      "project_id": "fit-crow-456505-d6",
+      "private_key_id": "81b62b7f0b31bb6385e9d7050b25fd6db867cf33",
+      "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDB2Vhx7yprH2gK\nojE4l8rtFysVdnHKioSG5VcAzzhBvlKgyxAlffXIBPa4M8MrBXRg5KYs3BQrRmQd\nzXwyNwV6a8MML4QydVVk81vC4gKuEREqT3LpaQFmdZ7LSkHzsvby8aq56o8gl4YF\nQHYCl5GyIYyrCegF9dRsd+e0onF8LkHESKHHwSMi3Iac0zflhes+VPCnW0k2fB3T\nPT/Sjs/FgYap9FiwowAbLsWCk5uvUel+1zFyS9rC+Nipo1liwXzN39EIfZeedyHR\nEHBl+JD5CX9jq+/Ls0bCrZ7cfDK+/5s3DLv3AI/H2OUNJkRq7pvhzgilS+IQntXC\njHViMKsBAgMBAAECggEAANBRM56SSh/w9aUibt9GB7DCim3bhjTNw2T7EPY/gVHQ\nGaZ5df0NX/das4+ySZjVmR75CrgOO9diBt/HSMzmxd/l7plir8qmTR6hS4l4PBO3\nJyz7iZ5ojxipFRliQe+iY4ci2MedgxX1FS3k+5eUoBpb83oUDtJY6mD7z5MyjPtW\naW2X3B6Z435uMLs58XgjYlSUKZm+LorVdnqJh3K0QocWX9WtyKumFzJ/lWBdRd2N\n9ZY1LoyYLeMoqCVEFwx/iuamqvZwl43Q9eApH03TebzJnN2M38vaoBqWknpQhMgS\n7t2/3tXVmYcFUxGeWN8tPsh3Cle5SEYK+4CDo+SKQQKBgQDon4U6VDl/RnXrNBfj\nXocv5Ok62b/oW5JSYbSonwNMv4dkU01ls9vBQJA0Y5k5938FeXbBFtFy6Vl/JJZU\nxTVrHNzSBpqn0aho2shyQiW7twTAK8CktOi4vW6SuMwue5KcLmHXT2S36SezDFSn\nMezQCGj3jYPqacqeuE/NBPvljQKBgQDVVFG26tRZiWPMk6pdzkKXI7DwKA9hare/\neCaRN+CQw//pcRI2R/SmfkI8CsL6u2V1J/YOdsZx8qOZcXplGRIiyxfefO1G3MN9\nsdN4pC6KZO1dUYMb7f9OXrBbYU/C7utmleMS2BB6lVOOWk5vewA9aWFNV8s2Gm3t\npCPQg+n8RQKBgQCrSbLvRU9lIXv4qc4hNNy0bokyNV5y+OKgWKOPOi9S1wEZ5aDr\nD2n0PdcxTFlqboyQemTwPx4Q0DR/Q3CSkPgJnCIZYJWGlwG728WXJI/mThhobI8Y\neMGYLpx52ys12vYUnK6cvTA7n6oE1EKNLlzivh6UkhadiDKTdsIEA/R7jQKBgHNL\nqw5NRI9Prdx3QnCIdXzyEUL6o7Vm1ABrk4yQwpH7HGiyb8Feil8hhfKlblPMzDzR\naC7RCtey57CaoCfbsO2VDkV1B1hxIEbiwQRG19B8U71HvLBvpLhafL4mjdExB5De\nGWep1t4prosVS6b8t1h5h9khRfbrudXiDGk5olBxAoGAVbOTiBk69wigDOb1V+JX\nMQUWr0dtfIw9ZQ+i+gNNHTrA87R2Lpi2Lo309UPz8YPzjDRbRXk5wn6RkHtm82L5\nkF7Dya40OWyBZqRywDlzBjv/mDY6XGXWglpZ9NcIJe9B444GT78w19o5s1blowVE\nPUquuJtN5ww/jGGElxjLpl0=\n-----END PRIVATE KEY-----\n",
+      "client_email": "elaporanepa@fit-crow-456505-d6.iam.gserviceaccount.com",
+      "client_id": "110838366239777434299",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/elaporanepa%40fit-crow-456505-d6.iam.gserviceaccount.com",
+      "universe_domain": "googleapis.com"
+    };
+    const FOLDER_ID = "1hPQ4KR-lW7mt-b10OlRSSOohBpDTyvxM"; // Isi dengan Folder ID dari Google Drive
+
+    // Fungsi untuk memvalidasi NIPA (13 digit angka)
+    function validateNIPA(nipa) {
+      return /^\d{13}$/.test(nipa);
     }
 
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-      updateIcon();
-    });
+    // Fungsi untuk mendapatkan token akses Service Account
+    async function getAccessToken() {
+      const jwtHeader = { alg: 'RS256', typ: 'JWT' };
+      const jwtClaimSet = {
+        iss: SERVICE_ACCOUNT.client_email,
+        scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata',
+        aud: SERVICE_ACCOUNT.token_uri,
+        exp: Math.floor(Date.now() / 1000) + 3600,
+        iat: Math.floor(Date.now() / 1000)
+      };
 
-    updateIcon();
-  });
-</script>
-<script>
-  let fotoBase64 = null;
+      const jwtToSign = btoa(JSON.stringify(jwtHeader)) + '.' + btoa(JSON.stringify(jwtClaimSet));
+      const privateKey = SERVICE_ACCOUNT.private_key.replace(/\n/g, '');
+      const key = await crypto.subtle.importKey(
+        'pkcs8',
+        pemToArrayBuffer(privateKey),
+        { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+        false,
+        ['sign']
+      );
+      const signature = await crypto.subtle.sign(
+        'RSASSA-PKCS1-v1_5',
+        key,
+        new TextEncoder().encode(jwtToSign)
+      );
+      const signatureBase64 = btoa(String.fromCharCode(...new Uint8Array(signature)));
+      const jwt = `${jwtToSign}.${signatureBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')}`;
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("laporanForm");
-    const fotoInput = document.getElementById("foto");
+      const response = await fetch(SERVICE_ACCOUNT.token_uri, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`
+      });
+      const data = await response.json();
+      return data.access_token;
+    }
 
-    fotoInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          fotoBase64 = event.target.result;
-        };
-        reader.readAsDataURL(file);
+    // Helper untuk mengonversi PEM ke ArrayBuffer
+    function pemToArrayBuffer(pem) {
+      const b64 = pem.replace(/-----BEGIN PRIVATE KEY-----|\n|-----END PRIVATE KEY-----/g, '');
+      const binary = atob(b64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
       }
-    });
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      generatePDF();
-    });
-  });
-
-  function generatePDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-
-    const nama = document.getElementById("nama").value;
-    const nipa = document.getElementById("nipa").value;
-    const bulan = document.getElementById("bulan").value;
-    const tanggal = document.getElementById("tanggal").value;
-    const materi = document.getElementById("materi").value;
-    const kategori = document.getElementById("kategori").value;
-    const jamaah = document.getElementById("jamaah").value;
-    const kelompok = document.getElementById("kelompok").value;
-    const tempat = document.getElementById("tempat").value;
-
-    let y = 20;
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(16);
-    pdf.text("LAPORAN EPA", 105, y, { align: "center" });
-    y += 10;
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(12);
-    pdf.text("PENYULUH AGAMA ISLAM NON PNS", 105, y, { align: "center" });
-    y += 15;
-
-    const data = [
-      ["Nama", nama],
-      ["NIPA", nipa],
-      ["Bulan Pelaporan", bulan],
-      ["Tanggal Pelaksanaan", tanggal],
-      ["Materi", materi],
-      ["Kategori", kategori],
-      ["Jumlah Jamaah", jamaah],
-      ["Nama Kelompok", kelompok],
-      ["Tempat Pelaksanaan", tempat]
-    ];
-
-    data.forEach(([label, value]) => {
-      pdf.text(`${label}`, 20, y);
-      pdf.text(":", 70, y);
-      pdf.text(`${value}`, 75, y);
-      y += 8;
-    });
-
-    function addTandaTangan(yPos) {
-      const ttdY = yPos + 30;
-      pdf.text("Penyuluh Agama Islam", 140, ttdY);
-      pdf.text("Mengetahui,", 20, ttdY);
-      pdf.text("Atasan Langsung", 20, ttdY + 7);
-
-      pdf.text(nama, 140, ttdY + 25);
-      pdf.text("H. M. Nastholih, S.Ag., M.Pd.I", 20, ttdY + 25);
-      pdf.text("NIP. 19720419 199703 1 003", 20, ttdY + 30);
+      return bytes.buffer;
     }
 
-    function savePDF() {
-      addTandaTangan(y);
-      pdf.save(`Laporan_EPA_${tanggal}.pdf`);
+    // Fungsi untuk sanitasi nama file
+    function sanitizeFilename(name) {
+      return name.replace(/[^a-zA-Z0-9_-]/g, '_').replace(/_+/g, '_');
     }
 
-    if (fotoBase64) {
-      const img = new Image();
-      img.onload = function () {
-        let imgProps = pdf.getImageProperties(fotoBase64);
-        let pdfWidth = 160;
-        let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    // Fungsi untuk mengunggah file ke Google Drive
+    async function uploadToDrive(pdfBlob, filename) {
+      try {
+        const accessToken = await getAccessToken();
+        const metadata = {
+          name: filename,
+          parents: [FOLDER_ID],
+          mimeType: 'application/pdf'
+        };
 
-        if (y + pdfHeight > 240) {
-          pdf.addPage();
-          y = 20;
-        } else {
-          y += 10;
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('file', pdfBlob);
+
+        const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,name', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${accessToken}` },
+          body: form
+        });
+        const result = await response.json();
+        console.log('File uploaded:', result);
+      } catch (error) {
+        console.error('Error uploading to Drive:', error);
+        alert('Gagal mengunggah ke Google Drive. Silakan coba lagi.');
+      }
+    }
+
+    // Fungsi untuk mengunduh laporan berdasarkan NIPA
+    async function downloadAllLaporan() {
+      try {
+        const nipa = prompt('Masukkan NIPA Anda (13 digit) untuk mengunduh laporan:');
+        if (nipa === null) {
+          return; // Jika klik Cancel, keluar tanpa pesan
+        }
+        if (!validateNIPA(nipa)) {
+          alert('NIPA harus berupa 13 digit angka.');
+          return;
         }
 
-        pdf.setFont("helvetica", "bold");
-        pdf.text("Foto Kegiatan:", 20, y);
-        y += 5;
-        pdf.setFont("helvetica", "normal");
-        pdf.addImage(fotoBase64, 'JPEG', 20, y, pdfWidth, pdfHeight);
-        y += pdfHeight;
-        savePDF();
-      };
-      img.onerror = savePDF;
-      img.src = fotoBase64;
-    } else {
-      savePDF();
+        const accessToken = await getAccessToken();
+        const response = await fetch(`https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&fields=files(id,name)`, {
+          headers: { 'Authorization': `Bearer ${accessToken}` }
+        });
+        const data = await response.json();
+        const zip = new JSZip();
+
+        for (const file of data.files) {
+          if (file.name.includes(`_${nipa}.pdf`)) {
+            const fileResponse = await fetch(`https://www.googleapis.com/drive/v3/files/${file.id}?alt=media`, {
+              headers: { 'Authorization': `Bearer ${accessToken}` }
+            });
+            const fileBlob = await fileResponse.blob();
+            zip.file(file.name, fileBlob);
+          }
+        }
+
+        if (Object.keys(zip.files).length === 0) {
+          alert('Tidak ada laporan yang ditemukan untuk NIPA ini.');
+          return;
+        }
+
+        zip.generateAsync({ type: "blob" }).then(content => {
+          saveAs(content, `Laporan_${nipa}.zip`);
+        });
+      } catch (error) {
+        console.error('Error downloading files:', error);
+        alert('Gagal mengunduh laporan. Silakan coba lagi.');
+      }
     }
-  }
-</script>
+
+    // Fungsi untuk menutup dialog catatan
+    function closeChangelogModal() {
+      document.getElementById('changelogModal').style.display = 'none';
+    }
+
+    // Script untuk Dark Mode dan Dialog
+    document.addEventListener("DOMContentLoaded", function () {
+      // Dark Mode
+      const toggle = document.getElementById("darkModeToggle");
+      const icon = document.getElementById("themeIcon");
+
+      function updateIcon() {
+        icon.textContent = document.body.classList.contains("dark-mode")
+          ? "dark_mode"
+          : "brightness_7";
+      }
+
+      toggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        updateIcon();
+      });
+
+      updateIcon();
+
+      // Tampilkan dialog catatan saat halaman dimuat
+      document.getElementById('changelogModal').style.display = 'flex';
+    });
+
+    // Script untuk Generate PDF dan Upload ke Google Drive
+    let fotoBase64 = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("laporanForm");
+      const fotoInput = document.getElementById("foto");
+
+      // Tambahkan tombol unduh semua laporan
+      const downloadBtn = document.createElement("button");
+      downloadBtn.textContent = "Unduh Laporan Saya";
+      downloadBtn.type = "button";
+      downloadBtn.style.marginTop = "10px";
+      form.appendChild(downloadBtn);
+      downloadBtn.addEventListener("click", downloadAllLaporan);
+
+      fotoInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            fotoBase64 = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        generatePDF();
+      });
+    });
+
+    function generatePDF() {
+      const nama = document.getElementById("nama").value.trim();
+      const nipa = document.getElementById("nipa").value.trim();
+      const bulan = document.getElementById("bulan").value;
+      const tanggal = document.getElementById("tanggal").value;
+      const materi = document.getElementById("materi").value;
+      const kategori = document.getElementById("kategori").value;
+      const jamaah = document.getElementById("jamaah").value;
+      const kelompok = document.getElementById("kelompok").value;
+      const tempat = document.getElementById("tempat").value;
+
+      // Validasi NIPA
+      if (!validateNIPA(nipa)) {
+        alert('NIPA harus berupa 13 digit angka.');
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+
+      let y = 20;
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.text("LAPORAN EPA", 105, y, { align: "center" });
+      y += 10;
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+      pdf.text("PENYULUH AGAMA ISLAM NON PNS", 105, y, { align: "center" });
+      y += 15;
+
+      const data = [
+        ["Nama", nama],
+        ["NIPA", nipa],
+        ["Bulan Pelaporan", bulan],
+        ["Tanggal Pelaksanaan", tanggal],
+        ["Materi", materi],
+        ["Kategori", kategori],
+        ["Jumlah Jamaah", jamaah],
+        ["Nama Kelompok", kelompok],
+        ["Tempat Pelaksanaan", tempat]
+      ];
+
+      data.forEach(([label, value]) => {
+        pdf.text(`${label}`, 20, y);
+        pdf.text(":", 70, y);
+        pdf.text(`${value}`, 75, y);
+        y += 8;
+      });
+
+      function addTandaTangan(yPos) {
+        const ttdY = yPos + 30;
+        pdf.text("Penyuluh Agama Islam", 140, ttdY);
+        pdf.text("Mengetahui,", 20, ttdY);
+        pdf.text("Atasan Langsung", 20, ttdY + 7);
+        pdf.text(nama, 140, ttdY + 25);
+        pdf.text("H. M. Nastholih, S.Ag., M.Pd.I", 20, ttdY + 25);
+        pdf.text("NIP. 19720419 199703 1 003", 20, ttdY + 30);
+      }
+
+      function savePDF() {
+        addTandaTangan(y);
+        const pdfBlob = pdf.output('blob');
+        const filename = `${sanitizeFilename(nama)}_${nipa}.pdf`; // Nama file: nama_NIPA.pdf
+        uploadToDrive(pdfBlob, filename);
+        pdf.save(filename); // Simpan lokal
+      }
+
+      if (fotoBase64) {
+        const img = new Image();
+        img.onload = function () {
+          let imgProps = pdf.getImageProperties(fotoBase64);
+          let pdfWidth = 160;
+          let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          if (y + pdfHeight > 240) {
+            pdf.addPage();
+            y = 20;
+          } else {
+            y += 10;
+          }
+
+          pdf.setFont("helvetica", "bold");
+          pdf.text("Foto Kegiatan:", 20, y);
+          y += 5;
+          pdf.setFont("helvetica", "normal");
+          pdf.addImage(fotoBase64, 'JPEG', 20, y, pdfWidth, pdfHeight);
+          y += pdfHeight;
+          savePDF();
+        };
+        img.onerror = savePDF;
+        img.src = fotoBase64;
+      } else {
+        savePDF();
+      }
+    }
+  </script>
 </body>
 </html>
