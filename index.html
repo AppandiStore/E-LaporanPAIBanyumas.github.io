@@ -1,3 +1,678 @@
-<script>
-  document.write(unescape('%3C%21DOCTYPE%20html%3E%0A%3Chtml%20lang%3D%22id%22%3E%0A%3Chead%3E%0A%20%20%3Cmeta%20charset%3D%22UTF-8%22%3E%0A%20%20%3Cmeta%20name%3D%22viewport%22%20content%3D%22width%3Ddevice-width%2C%20initial-scale%3D1.0%22%3E%0A%20%20%3Ctitle%3EE-Laporan%20Penyuluh%20Agama%20Banyumas%3C/title%3E%0A%20%20%3Cscript%20src%3D%22https%3A//cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js%22%3E%3C/script%3E%0A%20%20%3Cscript%20src%3D%22https%3A//cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js%22%3E%3C/script%3E%0A%20%20%3Cscript%20src%3D%22https%3A//cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js%22%3E%3C/script%3E%0A%20%20%3Clink%20href%3D%22https%3A//fonts.googleapis.com/css2%3Ffamily%3DMaterial+Symbols+Outlined%22%20rel%3D%22stylesheet%22%20/%3E%0A%20%20%3Cstyle%3E%0A%20%20%20%20body%20%7B%0A%20%20%20%20%20%20font-family%3A%20%27Arial%27%2C%20sans-serif%3B%0A%20%20%20%20%20%20background-color%3A%20%23f0f0f0%3B%0A%20%20%20%20%20%20padding%3A%2020px%3B%0A%20%20%20%20%20%20color%3A%20%23000%3B%0A%20%20%20%20%20%20transition%3A%20background%200.3s%2C%20color%200.3s%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.dark-mode%20%7B%0A%20%20%20%20%20%20background-color%3A%20%23121212%3B%0A%20%20%20%20%20%20color%3A%20%23fff%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.container%20%7B%0A%20%20%20%20%20%20max-width%3A%20800px%3B%0A%20%20%20%20%20%20margin%3A%20auto%3B%0A%20%20%20%20%20%20background%3A%20white%3B%0A%20%20%20%20%20%20padding%3A%2020px%3B%0A%20%20%20%20%20%20border-radius%3A%208px%3B%0A%20%20%20%20%20%20box-shadow%3A%200%200%2010px%20rgba%280%2C0%2C0%2C0.2%29%3B%0A%20%20%20%20%20%20transition%3A%20background%200.3s%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.dark-mode%20.container%20%7B%0A%20%20%20%20%20%20background-color%3A%20%231e1e1e%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20h1%20%7B%0A%20%20%20%20%20%20text-align%3A%20center%3B%0A%20%20%20%20%20%20margin-bottom%3A%2030px%3B%0A%20%20%20%20%20%20font-size%3A%2020px%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20label%20%7B%0A%20%20%20%20%20%20display%3A%20block%3B%0A%20%20%20%20%20%20margin-top%3A%2010px%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20input%2C%20select%2C%20textarea%20%7B%0A%20%20%20%20%20%20width%3A%20100%25%3B%0A%20%20%20%20%20%20padding%3A%208px%3B%0A%20%20%20%20%20%20margin-top%3A%204px%3B%0A%20%20%20%20%20%20border%3A%201px%20solid%20%23ccc%3B%0A%20%20%20%20%20%20border-radius%3A%204px%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.dark-mode%20input%2C%0A%20%20%20%20.dark-mode%20select%2C%0A%20%20%20%20.dark-mode%20textarea%20%7B%0A%20%20%20%20%20%20background-color%3A%20%232e2e2e%3B%0A%20%20%20%20%20%20color%3A%20%23fff%3B%0A%20%20%20%20%20%20border-color%3A%20%23444%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20button%20%7B%0A%20%20%20%20%20%20margin-top%3A%2020px%3B%0A%20%20%20%20%20%20padding%3A%2010px%2020px%3B%0A%20%20%20%20%20%20background-color%3A%20transparent%3B%0A%20%20%20%20%20%20color%3A%20%2327ae60%3B%0A%20%20%20%20%20%20border%3A%20none%3B%0A%20%20%20%20%20%20border-radius%3A%204px%3B%0A%20%20%20%20%20%20cursor%3A%20pointer%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20button%5Btype%3D%22submit%22%5D%20%7B%0A%20%20%20%20%20%20background-color%3A%20%2327ae60%3B%0A%20%20%20%20%20%20color%3A%20white%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20button%3Ahover%20%7B%0A%20%20%20%20%20%20background-color%3A%20transparent%3B%0A%20%20%20%20%20%20color%3A%20%23219150%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20button%5Btype%3D%22submit%22%5D%3Ahover%20%7B%0A%20%20%20%20%20%20background-color%3A%20%23219150%3B%0A%20%20%20%20%20%20color%3A%20white%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.toggle%20%7B%0A%20%20%20%20%20%20background%3A%20none%3B%0A%20%20%20%20%20%20border%3A%20none%3B%0A%20%20%20%20%20%20cursor%3A%20pointer%3B%0A%20%20%20%20%20%20float%3A%20right%3B%0A%20%20%20%20%20%20margin-top%3A%20-70px%3B%0A%20%20%20%20%20%20font-size%3A%2024px%3B%0A%20%20%20%20%20%20transition%3A%20transform%200.3s%20ease%3B%0A%20%20%20%20%20%20color%3A%20inherit%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.toggle%20.material-symbols-outlined%20%7B%0A%20%20%20%20%20%20font-size%3A%2028px%3B%0A%20%20%20%20%20%20transition%3A%20transform%200.3s%20ease%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.dark-mode%20.toggle%20.material-symbols-outlined%20%7B%0A%20%20%20%20%20%20color%3A%20%23fff%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.toggle%3Ahover%20.material-symbols-outlined%20%7B%0A%20%20%20%20%20%20transform%3A%20rotate%28180deg%29%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.header%20%7B%0A%20%20%20%20%20%20display%3A%20flex%3B%0A%20%20%20%20%20%20align-items%3A%20center%3B%0A%20%20%20%20%20%20flex-wrap%3A%20wrap%3B%0A%20%20%20%20%20%20gap%3A%2010px%3B%0A%20%20%20%20%20%20margin-bottom%3A%2020px%3B%0A%20%20%20%20%20%20justify-content%3A%20center%3B%0A%20%20%20%20%20%20text-align%3A%20center%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.header%20img%20%7B%0A%20%20%20%20%20%20width%3A%2050px%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.header%20h2%20%7B%0A%20%20%20%20%20%20margin%3A%200%3B%0A%20%20%20%20%20%20font-size%3A%2016px%3B%0A%20%20%20%20%20%20flex%3A%201%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20footer%20%7B%0A%20%20%20%20%20%20text-align%3A%20center%3B%0A%20%20%20%20%20%20margin-top%3A%2030px%3B%0A%20%20%20%20%20%20font-size%3A%2014px%3B%0A%20%20%20%20%20%20color%3A%20%23888%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.dark-mode%20footer%20%7B%0A%20%20%20%20%20%20color%3A%20%23bbb%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20footer%20svg%20%7B%0A%20%20%20%20%20%20vertical-align%3A%20middle%3B%0A%20%20%20%20%20%20margin-left%3A%206px%3B%0A%20%20%20%20%20%20height%3A%2016px%3B%0A%20%20%20%20%20%20width%3A%2016px%3B%0A%20%20%20%20%20%20fill%3A%20%2325D366%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20/*%20CSS%20untuk%20Dialog%20Catatan%20*/%0A%20%20%20%20.modal-overlay%20%7B%0A%20%20%20%20%20%20position%3A%20fixed%3B%0A%20%20%20%20%20%20top%3A%200%3B%0A%20%20%20%20%20%20left%3A%200%3B%0A%20%20%20%20%20%20width%3A%20100%25%3B%0A%20%20%20%20%20%20height%3A%20100%25%3B%0A%20%20%20%20%20%20background%3A%20rgba%280%2C%200%2C%200%2C%200.5%29%3B%0A%20%20%20%20%20%20display%3A%20flex%3B%0A%20%20%20%20%20%20justify-content%3A%20center%3B%0A%20%20%20%20%20%20align-items%3A%20center%3B%0A%20%20%20%20%20%20z-index%3A%201000%3B%0A%20%20%20%20%20%20opacity%3A%200%3B%0A%20%20%20%20%20%20animation%3A%20fadeIn%200.3s%20ease%20forwards%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.modal%20%7B%0A%20%20%20%20%20%20background%3A%20white%3B%0A%20%20%20%20%20%20max-width%3A%20500px%3B%0A%20%20%20%20%20%20width%3A%2090%25%3B%0A%20%20%20%20%20%20padding%3A%2020px%3B%0A%20%20%20%20%20%20border-radius%3A%2012px%3B%0A%20%20%20%20%20%20box-shadow%3A%200%204px%2020px%20rgba%280%2C%200%2C%200%2C%200.2%29%3B%0A%20%20%20%20%20%20transform%3A%20translateY%28-20px%29%3B%0A%20%20%20%20%20%20animation%3A%20slideIn%200.3s%20ease%20forwards%3B%0A%20%20%20%20%20%20position%3A%20relative%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.dark-mode%20.modal%20%7B%0A%20%20%20%20%20%20background%3A%20%231e1e1e%3B%0A%20%20%20%20%20%20color%3A%20%23fff%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.modal%20h3%20%7B%0A%20%20%20%20%20%20margin%3A%200%200%2015px%3B%0A%20%20%20%20%20%20font-size%3A%2022px%3B%0A%20%20%20%20%20%20color%3A%20%2327ae60%3B%0A%20%20%20%20%20%20text-align%3A%20center%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.dark-mode%20.modal%20h3%20%7B%0A%20%20%20%20%20%20color%3A%20%234ade80%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.modal%20p%20%7B%0A%20%20%20%20%20%20margin%3A%200%200%2020px%3B%0A%20%20%20%20%20%20font-size%3A%2014px%3B%0A%20%20%20%20%20%20line-height%3A%201.6%3B%0A%20%20%20%20%20%20color%3A%20%23333%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.dark-mode%20.modal%20p%20%7B%0A%20%20%20%20%20%20color%3A%20%23ddd%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.modal%20button%20%7B%0A%20%20%20%20%20%20display%3A%20block%3B%0A%20%20%20%20%20%20margin%3A%200%20auto%3B%0A%20%20%20%20%20%20padding%3A%2010px%2020px%3B%0A%20%20%20%20%20%20background%3A%20%2327ae60%3B%0A%20%20%20%20%20%20color%3A%20white%3B%0A%20%20%20%20%20%20border%3A%20none%3B%0A%20%20%20%20%20%20border-radius%3A%206px%3B%0A%20%20%20%20%20%20cursor%3A%20pointer%3B%0A%20%20%20%20%20%20font-size%3A%2014px%3B%0A%20%20%20%20%20%20transition%3A%20background%200.2s%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20.modal%20button%3Ahover%20%7B%0A%20%20%20%20%20%20background%3A%20%23219150%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20@keyframes%20fadeIn%20%7B%0A%20%20%20%20%20%20to%20%7B%20opacity%3A%201%3B%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20@keyframes%20slideIn%20%7B%0A%20%20%20%20%20%20to%20%7B%20transform%3A%20translateY%280%29%3B%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20@media%20%28max-width%3A%20600px%29%20%7B%0A%20%20%20%20%20%20.container%20%7B%0A%20%20%20%20%20%20%20%20padding%3A%2015px%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20h1%20%7B%0A%20%20%20%20%20%20%20%20font-size%3A%2018px%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20.toggle%20%7B%0A%20%20%20%20%20%20%20%20float%3A%20none%3B%0A%20%20%20%20%20%20%20%20display%3A%20block%3B%0A%20%20%20%20%20%20%20%20margin%3A%2010px%20auto%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20button%20%7B%0A%20%20%20%20%20%20%20%20width%3A%20100%25%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20.header%20%7B%0A%20%20%20%20%20%20%20%20flex-direction%3A%20column%3B%0A%20%20%20%20%20%20%20%20align-items%3A%20center%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20.header%20h2%20%7B%0A%20%20%20%20%20%20%20%20font-size%3A%2014px%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20.modal%20%7B%0A%20%20%20%20%20%20%20%20width%3A%2095%25%3B%0A%20%20%20%20%20%20%20%20padding%3A%2015px%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20.modal%20h3%20%7B%0A%20%20%20%20%20%20%20%20font-size%3A%2018px%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20.modal%20p%20%7B%0A%20%20%20%20%20%20%20%20font-size%3A%2013px%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%3C/style%3E%0A%3C/head%3E%0A%3Cbody%3E%0A%20%20%3C%21--%20Dialog%20Catatan%20--%3E%0A%20%20%3Cdiv%20id%3D%22changelogModal%22%20class%3D%22modal-overlay%22%3E%0A%20%20%20%20%3Cdiv%20class%3D%22modal%22%3E%0A%20%20%20%20%20%20%3Ch3%3ECatatan%20Perubahan%3C/h3%3E%0A%20%20%20%20%20%20%3Cp%3E%uD83D%uDE80%20%u2728%20%0A1.%20Fitur%20Baru%21%0AMenambahkan%20opsi%20%22Unduh%20Laporan%20Saya%22%2C%20cukup%20menggunakan%20NIPA%2C%20maka%20semua%20file%20Anda%20dari%20hasil%20generate%20akan%20terunduh.%0A%20%20%20%20%20%20%3C/p%3E%0A%20%20%20%20%20%20%3Cbutton%20onclick%3D%22closeChangelogModal%28%29%22%3ETutup%3C/button%3E%0A%20%20%20%20%3C/div%3E%0A%20%20%3C/div%3E%0A%0A%20%20%3Cdiv%20class%3D%22container%22%3E%0A%20%20%20%20%3Cdiv%20class%3D%22header%22%3E%0A%20%20%20%20%20%20%3Cimg%20src%3D%22https%3A//i.ibb.co.com/990pWt7G/logo-kemenag-png-1png.png%22%20alt%3D%22Logo%20Kemenag%22%3E%0A%20%20%20%20%20%20%3Ch2%3EKementerian%20Agama%20Republik%20Indonesia%3C/h2%3E%0A%20%20%20%20%3C/div%3E%0A%0A%20%20%20%20%3Ch1%20style%3D%22font-size%3A%2020px%3B%22%3EE-Laporan%20Penyuluh%20Agama%20Banyumas%3C/h1%3E%0A%0A%20%20%20%20%3Cbutton%20id%3D%22darkModeToggle%22%20class%3D%22toggle%22%20aria-label%3D%22Toggle%20Tema%22%3E%0A%20%20%20%20%20%20%3Cspan%20id%3D%22themeIcon%22%20class%3D%22material-symbols-outlined%22%3Ebrightness_7%3C/span%3E%0A%20%20%20%20%3C/button%3E%0A%0A%20%20%20%20%3Cform%20id%3D%22laporanForm%22%3E%0A%20%20%20%20%20%20%3Clabel%3ENama%3C/label%3E%0A%20%20%20%20%20%20%3Cinput%20type%3D%22text%22%20id%3D%22nama%22%20required%3E%0A%0A%20%20%20%20%20%20%3Clabel%3ENIPA%3C/label%3E%0A%20%20%20%20%20%20%3Cinput%20type%3D%22text%22%20id%3D%22nipa%22%20required%3E%0A%0A%20%20%20%20%20%20%3Clabel%3EBulan%20Pelaporan%3C/label%3E%0A%20%20%20%20%20%20%3Cselect%20id%3D%22bulan%22%20required%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Januari%22%3EJanuari%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Februari%22%3EFebruari%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Maret%22%3EMaret%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22April%22%3EApril%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Mei%22%3EMei%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Juni%22%3EJuni%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Juli%22%3EJuli%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Agustus%22%3EAgustus%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22September%22%3ESeptember%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Oktober%22%3EOktober%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22November%22%3ENovember%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Desember%22%3EDesember%3C/option%3E%0A%20%20%20%20%20%20%3C/select%3E%0A%0A%20%20%20%20%20%20%3Clabel%3ETanggal%20Pelaksanaan%3C/label%3E%0A%20%20%20%20%20%20%3Cinput%20type%3D%22date%22%20id%3D%22tanggal%22%20required%3E%0A%0A%20%20%20%20%20%20%3Clabel%3EMateri%3C/label%3E%0A%20%20%20%20%20%20%3Cinput%20type%3D%22text%22%20id%3D%22materi%22%20required%3E%0A%0A%20%20%20%20%20%20%3Clabel%3EKategori%3C/label%3E%0A%20%20%20%20%20%20%3Cselect%20id%3D%22kategori%22%20required%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Fiqh%22%3EFiqh%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Akhlaq%22%3EAkhlaq%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Tauhid%22%3ETauhid%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Muamalah%22%3EMuamalah%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Tarikh%22%3ETarikh%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Tajwid%22%3ETajwid%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Akidah%22%3EAkidah%3C/option%3E%0A%20%20%20%20%20%20%20%20%3Coption%20value%3D%22Qur%27an%20Hadits%22%3EQur%27an%20Hadits%3C/option%3E%0A%20%20%20%20%20%20%3C/select%3E%0A%0A%20%20%20%20%20%20%3Clabel%3EJumlah%20Jamaah%3C/label%3E%0A%20%20%20%20%20%20%3Cinput%20type%3D%22number%22%20id%3D%22jamaah%22%20required%3E%0A%0A%20%20%20%20%20%20%3Clabel%3ENama%20Kelompok%3C/label%3E%0A%20%20%20%20%20%20%3Cinput%20type%3D%22text%22%20id%3D%22kelompok%22%20required%3E%0A%0A%20%20%20%20%20%20%3Clabel%3ETempat%20Pelaksanaan%3C/label%3E%0A%20%20%20%20%20%20%3Cinput%20type%3D%22text%22%20id%3D%22tempat%22%20required%3E%0A%0A%20%20%20%20%20%20%3Clabel%3EFoto%20Kegiatan%3C/label%3E%0A%20%20%20%20%20%20%3Cinput%20type%3D%22file%22%20id%3D%22foto%22%20accept%3D%22image/*%22%3E%0A%0A%20%20%20%20%20%20%3Cbutton%20type%3D%22submit%22%3EDownload%20PDF%3C/button%3E%0A%20%20%20%20%3C/form%3E%0A%20%20%3C/div%3E%0A%0A%20%20%3Cfooter%3E%0A%20%20%20%20%A9%202025%20Appandi%20Project%0A%20%20%20%20%3Ca%20href%3D%22https%3A//wa.me/6281915771171%22%20target%3D%22_blank%22%3E%0A%20%20%20%20%20%20%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Cpath%20d%3D%22M16.001%204C9.925%204%205%208.925%205%2015.001c0%202.624.855%205.047%202.285%207.015L5%2028l6.216-2.242A11.952%2011.952%200%200%200%2016.001%2026C22.075%2026%2027%2021.075%2027%2015.001%2027%208.925%2022.075%204%2016.001%204zm0%202c5.523%200%2010%204.478%2010%2010.001%200%205.523-4.477%2010-10%2010-1.885%200-3.642-.55-5.123-1.492l-.358-.226-3.026%201.091%201.064-2.79-.23-.361A9.946%209.946%200%200%201%206%2015.001C6%209.478%2010.478%206%2016.001%206zM9.7%2010.965l-.206.004c-.576.02-1.13.506-1.237%201.073-.113.588-.205%201.134.27%202.018.646%201.192%202.195%203.04%204.93%204.334%202.736%201.294%203.474.884%204.068.832.596-.052%201.443-.59%201.654-1.16.211-.57.211-1.055.148-1.16-.063-.105-.23-.168-.484-.29-.254-.122-1.502-.742-1.733-.827-.231-.084-.399-.127-.567.127-.168.253-.653.825-.8.993-.147.168-.294.189-.548.063-.254-.126-1.072-.396-2.04-1.264-.754-.671-1.263-1.5-1.41-1.754-.147-.253-.016-.389.11-.512.113-.11.253-.294.38-.441.126-.147.168-.252.252-.421.084-.168.042-.316-.021-.441-.063-.126-.567-1.362-.775-1.859-.204-.495-.41-.52-.567-.526z%22/%3E%3C/svg%3E%0A%20%20%20%20%3C/a%3E%0A%20%20%20%20%3Cbr%3E%0A%20%20%20%20%3Csmall%3EThis%20website%20is%20always%20under%20development%2C%20for%20criticism%20and%20suggestions%20please%20contact%20me.%3C/small%3E%0A%20%20%3C/footer%3E%0A%0A%20%20%3Cscript%3E%0A%20%20%20%20//%20Konfigurasi%20Service%20Account%20%28isi%20manual%29%0A%20%20%20%20const%20SERVICE_ACCOUNT%20%3D%20%7B%0A%20%20%20%20%20%20%22type%22%3A%20%22service_account%22%2C%0A%20%20%20%20%20%20%22project_id%22%3A%20%22fit-crow-456505-d6%22%2C%0A%20%20%20%20%20%20%22private_key_id%22%3A%20%2281b62b7f0b31bb6385e9d7050b25fd6db867cf33%22%2C%0A%20%20%20%20%20%20%22private_key%22%3A%20%22-----BEGIN%20PRIVATE%20KEY-----%5CnMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDB2Vhx7yprH2gK%5CnojE4l8rtFysVdnHKioSG5VcAzzhBvlKgyxAlffXIBPa4M8MrBXRg5KYs3BQrRmQd%5CnzXwyNwV6a8MML4QydVVk81vC4gKuEREqT3LpaQFmdZ7LSkHzsvby8aq56o8gl4YF%5CnQHYCl5GyIYyrCegF9dRsd+e0onF8LkHESKHHwSMi3Iac0zflhes+VPCnW0k2fB3T%5CnPT/Sjs/FgYap9FiwowAbLsWCk5uvUel+1zFyS9rC+Nipo1liwXzN39EIfZeedyHR%5CnEHBl+JD5CX9jq+/Ls0bCrZ7cfDK+/5s3DLv3AI/H2OUNJkRq7pvhzgilS+IQntXC%5CnjHViMKsBAgMBAAECggEAANBRM56SSh/w9aUibt9GB7DCim3bhjTNw2T7EPY/gVHQ%5CnGaZ5df0NX/das4+ySZjVmR75CrgOO9diBt/HSMzmxd/l7plir8qmTR6hS4l4PBO3%5CnJyz7iZ5ojxipFRliQe+iY4ci2MedgxX1FS3k+5eUoBpb83oUDtJY6mD7z5MyjPtW%5CnaW2X3B6Z435uMLs58XgjYlSUKZm+LorVdnqJh3K0QocWX9WtyKumFzJ/lWBdRd2N%5Cn9ZY1LoyYLeMoqCVEFwx/iuamqvZwl43Q9eApH03TebzJnN2M38vaoBqWknpQhMgS%5Cn7t2/3tXVmYcFUxGeWN8tPsh3Cle5SEYK+4CDo+SKQQKBgQDon4U6VDl/RnXrNBfj%5CnXocv5Ok62b/oW5JSYbSonwNMv4dkU01ls9vBQJA0Y5k5938FeXbBFtFy6Vl/JJZU%5CnxTVrHNzSBpqn0aho2shyQiW7twTAK8CktOi4vW6SuMwue5KcLmHXT2S36SezDFSn%5CnMezQCGj3jYPqacqeuE/NBPvljQKBgQDVVFG26tRZiWPMk6pdzkKXI7DwKA9hare/%5CneCaRN+CQw//pcRI2R/SmfkI8CsL6u2V1J/YOdsZx8qOZcXplGRIiyxfefO1G3MN9%5CnsdN4pC6KZO1dUYMb7f9OXrBbYU/C7utmleMS2BB6lVOOWk5vewA9aWFNV8s2Gm3t%5CnpCPQg+n8RQKBgQCrSbLvRU9lIXv4qc4hNNy0bokyNV5y+OKgWKOPOi9S1wEZ5aDr%5CnD2n0PdcxTFlqboyQemTwPx4Q0DR/Q3CSkPgJnCIZYJWGlwG728WXJI/mThhobI8Y%5CneMGYLpx52ys12vYUnK6cvTA7n6oE1EKNLlzivh6UkhadiDKTdsIEA/R7jQKBgHNL%5Cnqw5NRI9Prdx3QnCIdXzyEUL6o7Vm1ABrk4yQwpH7HGiyb8Feil8hhfKlblPMzDzR%5CnaC7RCtey57CaoCfbsO2VDkV1B1hxIEbiwQRG19B8U71HvLBvpLhafL4mjdExB5De%5CnGWep1t4prosVS6b8t1h5h9khRfbrudXiDGk5olBxAoGAVbOTiBk69wigDOb1V+JX%5CnMQUWr0dtfIw9ZQ+i+gNNHTrA87R2Lpi2Lo309UPz8YPzjDRbRXk5wn6RkHtm82L5%5CnkF7Dya40OWyBZqRywDlzBjv/mDY6XGXWglpZ9NcIJe9B444GT78w19o5s1blowVE%5CnPUquuJtN5ww/jGGElxjLpl0%3D%5Cn-----END%20PRIVATE%20KEY-----%5Cn%22%2C%0A%20%20%20%20%20%20%22client_email%22%3A%20%22elaporanepa@fit-crow-456505-d6.iam.gserviceaccount.com%22%2C%0A%20%20%20%20%20%20%22client_id%22%3A%20%22110838366239777434299%22%2C%0A%20%20%20%20%20%20%22auth_uri%22%3A%20%22https%3A//accounts.google.com/o/oauth2/auth%22%2C%0A%20%20%20%20%20%20%22token_uri%22%3A%20%22https%3A//oauth2.googleapis.com/token%22%2C%0A%20%20%20%20%20%20%22auth_provider_x509_cert_url%22%3A%20%22https%3A//www.googleapis.com/oauth2/v1/certs%22%2C%0A%20%20%20%20%20%20%22client_x509_cert_url%22%3A%20%22https%3A//www.googleapis.com/robot/v1/metadata/x509/elaporanepa%2540fit-crow-456505-d6.iam.gserviceaccount.com%22%2C%0A%20%20%20%20%20%20%22universe_domain%22%3A%20%22googleapis.com%22%0A%20%20%20%20%7D%3B%0A%20%20%20%20const%20FOLDER_ID%20%3D%20%221hPQ4KR-lW7mt-b10OlRSSOohBpDTyvxM%22%3B%20//%20Isi%20dengan%20Folder%20ID%20dari%20Google%20Drive%0A%0A%20%20%20%20//%20Fungsi%20untuk%20memvalidasi%20NIPA%20%2813%20digit%20angka%29%0A%20%20%20%20function%20validateNIPA%28nipa%29%20%7B%0A%20%20%20%20%20%20return%20/%5E%5Cd%7B13%7D%24/.test%28nipa%29%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20//%20Fungsi%20untuk%20mendapatkan%20token%20akses%20Service%20Account%0A%20%20%20%20async%20function%20getAccessToken%28%29%20%7B%0A%20%20%20%20%20%20const%20jwtHeader%20%3D%20%7B%20alg%3A%20%27RS256%27%2C%20typ%3A%20%27JWT%27%20%7D%3B%0A%20%20%20%20%20%20const%20jwtClaimSet%20%3D%20%7B%0A%20%20%20%20%20%20%20%20iss%3A%20SERVICE_ACCOUNT.client_email%2C%0A%20%20%20%20%20%20%20%20scope%3A%20%27https%3A//www.googleapis.com/auth/drive.file%20https%3A//www.googleapis.com/auth/drive.metadata%27%2C%0A%20%20%20%20%20%20%20%20aud%3A%20SERVICE_ACCOUNT.token_uri%2C%0A%20%20%20%20%20%20%20%20exp%3A%20Math.floor%28Date.now%28%29%20/%201000%29%20+%203600%2C%0A%20%20%20%20%20%20%20%20iat%3A%20Math.floor%28Date.now%28%29%20/%201000%29%0A%20%20%20%20%20%20%7D%3B%0A%0A%20%20%20%20%20%20const%20jwtToSign%20%3D%20btoa%28JSON.stringify%28jwtHeader%29%29%20+%20%27.%27%20+%20btoa%28JSON.stringify%28jwtClaimSet%29%29%3B%0A%20%20%20%20%20%20const%20privateKey%20%3D%20SERVICE_ACCOUNT.private_key.replace%28/%5Cn/g%2C%20%27%27%29%3B%0A%20%20%20%20%20%20const%20key%20%3D%20await%20crypto.subtle.importKey%28%0A%20%20%20%20%20%20%20%20%27pkcs8%27%2C%0A%20%20%20%20%20%20%20%20pemToArrayBuffer%28privateKey%29%2C%0A%20%20%20%20%20%20%20%20%7B%20name%3A%20%27RSASSA-PKCS1-v1_5%27%2C%20hash%3A%20%27SHA-256%27%20%7D%2C%0A%20%20%20%20%20%20%20%20false%2C%0A%20%20%20%20%20%20%20%20%5B%27sign%27%5D%0A%20%20%20%20%20%20%29%3B%0A%20%20%20%20%20%20const%20signature%20%3D%20await%20crypto.subtle.sign%28%0A%20%20%20%20%20%20%20%20%27RSASSA-PKCS1-v1_5%27%2C%0A%20%20%20%20%20%20%20%20key%2C%0A%20%20%20%20%20%20%20%20new%20TextEncoder%28%29.encode%28jwtToSign%29%0A%20%20%20%20%20%20%29%3B%0A%20%20%20%20%20%20const%20signatureBase64%20%3D%20btoa%28String.fromCharCode%28...new%20Uint8Array%28signature%29%29%29%3B%0A%20%20%20%20%20%20const%20jwt%20%3D%20%60%24%7BjwtToSign%7D.%24%7BsignatureBase64.replace%28/%5C+/g%2C%20%27-%27%29.replace%28/%5C//g%2C%20%27_%27%29.replace%28/%3D+%24/%2C%20%27%27%29%7D%60%3B%0A%0A%20%20%20%20%20%20const%20response%20%3D%20await%20fetch%28SERVICE_ACCOUNT.token_uri%2C%20%7B%0A%20%20%20%20%20%20%20%20method%3A%20%27POST%27%2C%0A%20%20%20%20%20%20%20%20headers%3A%20%7B%20%27Content-Type%27%3A%20%27application/x-www-form-urlencoded%27%20%7D%2C%0A%20%20%20%20%20%20%20%20body%3A%20%60grant_type%3Durn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer%26assertion%3D%24%7Bjwt%7D%60%0A%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20const%20data%20%3D%20await%20response.json%28%29%3B%0A%20%20%20%20%20%20return%20data.access_token%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20//%20Helper%20untuk%20mengonversi%20PEM%20ke%20ArrayBuffer%0A%20%20%20%20function%20pemToArrayBuffer%28pem%29%20%7B%0A%20%20%20%20%20%20const%20b64%20%3D%20pem.replace%28/-----BEGIN%20PRIVATE%20KEY-----%7C%5Cn%7C-----END%20PRIVATE%20KEY-----/g%2C%20%27%27%29%3B%0A%20%20%20%20%20%20const%20binary%20%3D%20atob%28b64%29%3B%0A%20%20%20%20%20%20const%20bytes%20%3D%20new%20Uint8Array%28binary.length%29%3B%0A%20%20%20%20%20%20for%20%28let%20i%20%3D%200%3B%20i%20%3C%20binary.length%3B%20i++%29%20%7B%0A%20%20%20%20%20%20%20%20bytes%5Bi%5D%20%3D%20binary.charCodeAt%28i%29%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20return%20bytes.buffer%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20//%20Fungsi%20untuk%20sanitasi%20nama%20file%0A%20%20%20%20function%20sanitizeFilename%28name%29%20%7B%0A%20%20%20%20%20%20return%20name.replace%28/%5B%5Ea-zA-Z0-9_-%5D/g%2C%20%27_%27%29.replace%28/_+/g%2C%20%27_%27%29%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20//%20Fungsi%20untuk%20mengunggah%20file%20ke%20Google%20Drive%0A%20%20%20%20async%20function%20uploadToDrive%28pdfBlob%2C%20filename%29%20%7B%0A%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20const%20accessToken%20%3D%20await%20getAccessToken%28%29%3B%0A%20%20%20%20%20%20%20%20const%20metadata%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%20%20name%3A%20filename%2C%0A%20%20%20%20%20%20%20%20%20%20parents%3A%20%5BFOLDER_ID%5D%2C%0A%20%20%20%20%20%20%20%20%20%20mimeType%3A%20%27application/pdf%27%0A%20%20%20%20%20%20%20%20%7D%3B%0A%0A%20%20%20%20%20%20%20%20const%20form%20%3D%20new%20FormData%28%29%3B%0A%20%20%20%20%20%20%20%20form.append%28%27metadata%27%2C%20new%20Blob%28%5BJSON.stringify%28metadata%29%5D%2C%20%7B%20type%3A%20%27application/json%27%20%7D%29%29%3B%0A%20%20%20%20%20%20%20%20form.append%28%27file%27%2C%20pdfBlob%29%3B%0A%0A%20%20%20%20%20%20%20%20const%20response%20%3D%20await%20fetch%28%27https%3A//www.googleapis.com/upload/drive/v3/files%3FuploadType%3Dmultipart%26fields%3Did%2Cname%27%2C%20%7B%0A%20%20%20%20%20%20%20%20%20%20method%3A%20%27POST%27%2C%0A%20%20%20%20%20%20%20%20%20%20headers%3A%20%7B%20%27Authorization%27%3A%20%60Bearer%20%24%7BaccessToken%7D%60%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20body%3A%20form%0A%20%20%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%20%20const%20result%20%3D%20await%20response.json%28%29%3B%0A%20%20%20%20%20%20%20%20console.log%28%27File%20uploaded%3A%27%2C%20result%29%3B%0A%20%20%20%20%20%20%7D%20catch%20%28error%29%20%7B%0A%20%20%20%20%20%20%20%20console.error%28%27Error%20uploading%20to%20Drive%3A%27%2C%20error%29%3B%0A%20%20%20%20%20%20%20%20alert%28%27Gagal%20mengunggah%20ke%20Google%20Drive.%20Silakan%20coba%20lagi.%27%29%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20//%20Fungsi%20untuk%20mengunduh%20laporan%20berdasarkan%20NIPA%0A%20%20%20%20async%20function%20downloadAllLaporan%28%29%20%7B%0A%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20const%20nipa%20%3D%20prompt%28%27Masukkan%20NIPA%20Anda%20%2813%20digit%29%20untuk%20mengunduh%20laporan%3A%27%29%3B%0A%20%20%20%20%20%20%20%20if%20%28nipa%20%3D%3D%3D%20null%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20return%3B%20//%20Jika%20klik%20Cancel%2C%20keluar%20tanpa%20pesan%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20if%20%28%21validateNIPA%28nipa%29%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20alert%28%27NIPA%20harus%20berupa%2013%20digit%20angka.%27%29%3B%0A%20%20%20%20%20%20%20%20%20%20return%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20const%20accessToken%20%3D%20await%20getAccessToken%28%29%3B%0A%20%20%20%20%20%20%20%20const%20response%20%3D%20await%20fetch%28%60https%3A//www.googleapis.com/drive/v3/files%3Fq%3D%27%24%7BFOLDER_ID%7D%27+in+parents%26fields%3Dfiles%28id%2Cname%29%60%2C%20%7B%0A%20%20%20%20%20%20%20%20%20%20headers%3A%20%7B%20%27Authorization%27%3A%20%60Bearer%20%24%7BaccessToken%7D%60%20%7D%0A%20%20%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%20%20const%20data%20%3D%20await%20response.json%28%29%3B%0A%20%20%20%20%20%20%20%20const%20zip%20%3D%20new%20JSZip%28%29%3B%0A%0A%20%20%20%20%20%20%20%20for%20%28const%20file%20of%20data.files%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20if%20%28file.name.includes%28%60_%24%7Bnipa%7D.pdf%60%29%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20const%20fileResponse%20%3D%20await%20fetch%28%60https%3A//www.googleapis.com/drive/v3/files/%24%7Bfile.id%7D%3Falt%3Dmedia%60%2C%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20headers%3A%20%7B%20%27Authorization%27%3A%20%60Bearer%20%24%7BaccessToken%7D%60%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20const%20fileBlob%20%3D%20await%20fileResponse.blob%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20zip.file%28file.name%2C%20fileBlob%29%3B%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20if%20%28Object.keys%28zip.files%29.length%20%3D%3D%3D%200%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20alert%28%27Tidak%20ada%20laporan%20yang%20ditemukan%20untuk%20NIPA%20ini.%27%29%3B%0A%20%20%20%20%20%20%20%20%20%20return%3B%0A%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20zip.generateAsync%28%7B%20type%3A%20%22blob%22%20%7D%29.then%28content%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20saveAs%28content%2C%20%60Laporan_%24%7Bnipa%7D.zip%60%29%3B%0A%20%20%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%7D%20catch%20%28error%29%20%7B%0A%20%20%20%20%20%20%20%20console.error%28%27Error%20downloading%20files%3A%27%2C%20error%29%3B%0A%20%20%20%20%20%20%20%20alert%28%27Gagal%20mengunduh%20laporan.%20Silakan%20coba%20lagi.%27%29%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20//%20Fungsi%20untuk%20menutup%20dialog%20catatan%0A%20%20%20%20function%20closeChangelogModal%28%29%20%7B%0A%20%20%20%20%20%20document.getElementById%28%27changelogModal%27%29.style.display%20%3D%20%27none%27%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20//%20Script%20untuk%20Dark%20Mode%20dan%20Dialog%0A%20%20%20%20document.addEventListener%28%22DOMContentLoaded%22%2C%20function%20%28%29%20%7B%0A%20%20%20%20%20%20//%20Dark%20Mode%0A%20%20%20%20%20%20const%20toggle%20%3D%20document.getElementById%28%22darkModeToggle%22%29%3B%0A%20%20%20%20%20%20const%20icon%20%3D%20document.getElementById%28%22themeIcon%22%29%3B%0A%0A%20%20%20%20%20%20function%20updateIcon%28%29%20%7B%0A%20%20%20%20%20%20%20%20icon.textContent%20%3D%20document.body.classList.contains%28%22dark-mode%22%29%0A%20%20%20%20%20%20%20%20%20%20%3F%20%22dark_mode%22%0A%20%20%20%20%20%20%20%20%20%20%3A%20%22brightness_7%22%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20toggle.addEventListener%28%22click%22%2C%20%28%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20document.body.classList.toggle%28%22dark-mode%22%29%3B%0A%20%20%20%20%20%20%20%20updateIcon%28%29%3B%0A%20%20%20%20%20%20%7D%29%3B%0A%0A%20%20%20%20%20%20updateIcon%28%29%3B%0A%0A%20%20%20%20%20%20//%20Tampilkan%20dialog%20catatan%20saat%20halaman%20dimuat%0A%20%20%20%20%20%20document.getElementById%28%27changelogModal%27%29.style.display%20%3D%20%27flex%27%3B%0A%20%20%20%20%7D%29%3B%0A%0A%20%20%20%20//%20Script%20untuk%20Generate%20PDF%20dan%20Upload%20ke%20Google%20Drive%0A%20%20%20%20let%20fotoBase64%20%3D%20null%3B%0A%0A%20%20%20%20document.addEventListener%28%22DOMContentLoaded%22%2C%20%28%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20const%20form%20%3D%20document.getElementById%28%22laporanForm%22%29%3B%0A%20%20%20%20%20%20const%20fotoInput%20%3D%20document.getElementById%28%22foto%22%29%3B%0A%0A%20%20%20%20%20%20//%20Tambahkan%20tombol%20unduh%20semua%20laporan%0A%20%20%20%20%20%20const%20downloadBtn%20%3D%20document.createElement%28%22button%22%29%3B%0A%20%20%20%20%20%20downloadBtn.textContent%20%3D%20%22Unduh%20Laporan%20Saya%22%3B%0A%20%20%20%20%20%20downloadBtn.type%20%3D%20%22button%22%3B%0A%20%20%20%20%20%20downloadBtn.style.marginTop%20%3D%20%2210px%22%3B%0A%20%20%20%20%20%20form.appendChild%28downloadBtn%29%3B%0A%20%20%20%20%20%20downloadBtn.addEventListener%28%22click%22%2C%20downloadAllLaporan%29%3B%0A%0A%20%20%20%20%20%20fotoInput.addEventListener%28%22change%22%2C%20%28e%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20const%20file%20%3D%20e.target.files%5B0%5D%3B%0A%20%20%20%20%20%20%20%20if%20%28file%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20const%20reader%20%3D%20new%20FileReader%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20reader.onload%20%3D%20function%20%28event%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20fotoBase64%20%3D%20event.target.result%3B%0A%20%20%20%20%20%20%20%20%20%20%7D%3B%0A%20%20%20%20%20%20%20%20%20%20reader.readAsDataURL%28file%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%29%3B%0A%0A%20%20%20%20%20%20form.addEventListener%28%22submit%22%2C%20function%20%28e%29%20%7B%0A%20%20%20%20%20%20%20%20e.preventDefault%28%29%3B%0A%20%20%20%20%20%20%20%20generatePDF%28%29%3B%0A%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%7D%29%3B%0A%0A%20%20%20%20function%20generatePDF%28%29%20%7B%0A%20%20%20%20%20%20const%20nama%20%3D%20document.getElementById%28%22nama%22%29.value.trim%28%29%3B%0A%20%20%20%20%20%20const%20nipa%20%3D%20document.getElementById%28%22nipa%22%29.value.trim%28%29%3B%0A%20%20%20%20%20%20const%20bulan%20%3D%20document.getElementById%28%22bulan%22%29.value%3B%0A%20%20%20%20%20%20const%20tanggal%20%3D%20document.getElementById%28%22tanggal%22%29.value%3B%0A%20%20%20%20%20%20const%20materi%20%3D%20document.getElementById%28%22materi%22%29.value%3B%0A%20%20%20%20%20%20const%20kategori%20%3D%20document.getElementById%28%22kategori%22%29.value%3B%0A%20%20%20%20%20%20const%20jamaah%20%3D%20document.getElementById%28%22jamaah%22%29.value%3B%0A%20%20%20%20%20%20const%20kelompok%20%3D%20document.getElementById%28%22kelompok%22%29.value%3B%0A%20%20%20%20%20%20const%20tempat%20%3D%20document.getElementById%28%22tempat%22%29.value%3B%0A%0A%20%20%20%20%20%20//%20Validasi%20NIPA%0A%20%20%20%20%20%20if%20%28%21validateNIPA%28nipa%29%29%20%7B%0A%20%20%20%20%20%20%20%20alert%28%27NIPA%20harus%20berupa%2013%20digit%20angka.%27%29%3B%0A%20%20%20%20%20%20%20%20return%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20const%20%7B%20jsPDF%20%7D%20%3D%20window.jspdf%3B%0A%20%20%20%20%20%20const%20pdf%20%3D%20new%20jsPDF%28%29%3B%0A%0A%20%20%20%20%20%20let%20y%20%3D%2020%3B%0A%20%20%20%20%20%20pdf.setFont%28%22helvetica%22%2C%20%22bold%22%29%3B%0A%20%20%20%20%20%20pdf.setFontSize%2816%29%3B%0A%20%20%20%20%20%20pdf.text%28%22LAPORAN%20EPA%22%2C%20105%2C%20y%2C%20%7B%20align%3A%20%22center%22%20%7D%29%3B%0A%20%20%20%20%20%20y%20+%3D%2010%3B%0A%20%20%20%20%20%20pdf.setFont%28%22helvetica%22%2C%20%22normal%22%29%3B%0A%20%20%20%20%20%20pdf.setFontSize%2812%29%3B%0A%20%20%20%20%20%20pdf.text%28%22PENYULUH%20AGAMA%20ISLAM%20NON%20PNS%22%2C%20105%2C%20y%2C%20%7B%20align%3A%20%22center%22%20%7D%29%3B%0A%20%20%20%20%20%20y%20+%3D%2015%3B%0A%0A%20%20%20%20%20%20const%20data%20%3D%20%5B%0A%20%20%20%20%20%20%20%20%5B%22Nama%22%2C%20nama%5D%2C%0A%20%20%20%20%20%20%20%20%5B%22NIPA%22%2C%20nipa%5D%2C%0A%20%20%20%20%20%20%20%20%5B%22Bulan%20Pelaporan%22%2C%20bulan%5D%2C%0A%20%20%20%20%20%20%20%20%5B%22Tanggal%20Pelaksanaan%22%2C%20tanggal%5D%2C%0A%20%20%20%20%20%20%20%20%5B%22Materi%22%2C%20materi%5D%2C%0A%20%20%20%20%20%20%20%20%5B%22Kategori%22%2C%20kategori%5D%2C%0A%20%20%20%20%20%20%20%20%5B%22Jumlah%20Jamaah%22%2C%20jamaah%5D%2C%0A%20%20%20%20%20%20%20%20%5B%22Nama%20Kelompok%22%2C%20kelompok%5D%2C%0A%20%20%20%20%20%20%20%20%5B%22Tempat%20Pelaksanaan%22%2C%20tempat%5D%0A%20%20%20%20%20%20%5D%3B%0A%0A%20%20%20%20%20%20data.forEach%28%28%5Blabel%2C%20value%5D%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20pdf.text%28%60%24%7Blabel%7D%60%2C%2020%2C%20y%29%3B%0A%20%20%20%20%20%20%20%20pdf.text%28%22%3A%22%2C%2070%2C%20y%29%3B%0A%20%20%20%20%20%20%20%20pdf.text%28%60%24%7Bvalue%7D%60%2C%2075%2C%20y%29%3B%0A%20%20%20%20%20%20%20%20y%20+%3D%208%3B%0A%20%20%20%20%20%20%7D%29%3B%0A%0A%20%20%20%20%20%20function%20addTandaTangan%28yPos%29%20%7B%0A%20%20%20%20%20%20%20%20const%20ttdY%20%3D%20yPos%20+%2030%3B%0A%20%20%20%20%20%20%20%20pdf.text%28%22Penyuluh%20Agama%20Islam%22%2C%20140%2C%20ttdY%29%3B%0A%20%20%20%20%20%20%20%20pdf.text%28%22Mengetahui%2C%22%2C%2020%2C%20ttdY%29%3B%0A%20%20%20%20%20%20%20%20pdf.text%28%22Atasan%20Langsung%22%2C%2020%2C%20ttdY%20+%207%29%3B%0A%20%20%20%20%20%20%20%20pdf.text%28nama%2C%20140%2C%20ttdY%20+%2025%29%3B%0A%20%20%20%20%20%20%20%20pdf.text%28%22H.%20M.%20Nastholih%2C%20S.Ag.%2C%20M.Pd.I%22%2C%2020%2C%20ttdY%20+%2025%29%3B%0A%20%20%20%20%20%20%20%20pdf.text%28%22NIP.%2019720419%20199703%201%20003%22%2C%2020%2C%20ttdY%20+%2030%29%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20function%20savePDF%28%29%20%7B%0A%20%20%20%20%20%20%20%20addTandaTangan%28y%29%3B%0A%20%20%20%20%20%20%20%20const%20pdfBlob%20%3D%20pdf.output%28%27blob%27%29%3B%0A%20%20%20%20%20%20%20%20const%20filename%20%3D%20%60%24%7BsanitizeFilename%28nama%29%7D_%24%7Bnipa%7D.pdf%60%3B%20//%20Nama%20file%3A%20nama_NIPA.pdf%0A%20%20%20%20%20%20%20%20uploadToDrive%28pdfBlob%2C%20filename%29%3B%0A%20%20%20%20%20%20%20%20pdf.save%28filename%29%3B%20//%20Simpan%20lokal%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20if%20%28fotoBase64%29%20%7B%0A%20%20%20%20%20%20%20%20const%20img%20%3D%20new%20Image%28%29%3B%0A%20%20%20%20%20%20%20%20img.onload%20%3D%20function%20%28%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20let%20imgProps%20%3D%20pdf.getImageProperties%28fotoBase64%29%3B%0A%20%20%20%20%20%20%20%20%20%20let%20pdfWidth%20%3D%20160%3B%0A%20%20%20%20%20%20%20%20%20%20let%20pdfHeight%20%3D%20%28imgProps.height%20*%20pdfWidth%29%20/%20imgProps.width%3B%0A%0A%20%20%20%20%20%20%20%20%20%20if%20%28y%20+%20pdfHeight%20%3E%20240%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20pdf.addPage%28%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20y%20%3D%2020%3B%0A%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20y%20+%3D%2010%3B%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20%20%20%20%20pdf.setFont%28%22helvetica%22%2C%20%22bold%22%29%3B%0A%20%20%20%20%20%20%20%20%20%20pdf.text%28%22Foto%20Kegiatan%3A%22%2C%2020%2C%20y%29%3B%0A%20%20%20%20%20%20%20%20%20%20y%20+%3D%205%3B%0A%20%20%20%20%20%20%20%20%20%20pdf.setFont%28%22helvetica%22%2C%20%22normal%22%29%3B%0A%20%20%20%20%20%20%20%20%20%20pdf.addImage%28fotoBase64%2C%20%27JPEG%27%2C%2020%2C%20y%2C%20pdfWidth%2C%20pdfHeight%29%3B%0A%20%20%20%20%20%20%20%20%20%20y%20+%3D%20pdfHeight%3B%0A%20%20%20%20%20%20%20%20%20%20savePDF%28%29%3B%0A%20%20%20%20%20%20%20%20%7D%3B%0A%20%20%20%20%20%20%20%20img.onerror%20%3D%20savePDF%3B%0A%20%20%20%20%20%20%20%20img.src%20%3D%20fotoBase64%3B%0A%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20savePDF%28%29%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%3C/script%3E%0A%3C/body%3E%0A%3C/html%3E%0A'));
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Laporan Penyuluh Agama Banyumas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+      color: #000;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transition: background 0.3s;
+    }
+
+    .dark-mode .container {
+      background-color: #1e1e1e;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .dark-mode input,
+    .dark-mode select,
+    .dark-mode textarea {
+      background-color: #2e2e2e;
+      color: #fff;
+      border-color: #444;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: transparent;
+      color: #27ae60;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button[type="submit"] {
+      background-color: #27ae60;
+      color: white;
+    }
+
+    button:hover {
+      background-color: transparent;
+      color: #219150;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #219150;
+      color: white;
+    }
+
+    .toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      float: right;
+      margin-top: -70px;
+      font-size: 24px;
+      transition: transform 0.3s ease;
+      color: inherit;
+    }
+
+    .toggle.material-symbols-outlined {
+      font-size: 28px;
+      transition: transform 0.3s ease;
+    }
+
+    .dark-mode .toggle.material-symbols-outlined {
+      color: #fff;
+    }
+
+    .toggle:hover.material-symbols-outlined {
+      transform: rotate(180deg);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .header img {
+      width: 50px;
+    }
+
+    .header h2 {
+      margin: 0;
+      font-size: 16px;
+      flex: 1;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
+    }
+
+    .dark-mode footer {
+      color: #bbb;
+    }
+
+    footer svg {
+      vertical-align: middle;
+      margin-left: 6px;
+      height: 16px;
+      width: 16px;
+      fill: #25D366;
+    }
+
+    /* CSS untuk Dialog Catatan dan Dialog NIPA */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .modal-overlay[style*="display: none"] {
+      display: none !important;
+    }
+
+    .modal {
+      background: white;
+      max-width: 500px;
+      width: 90%;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-20px);
+      animation: slideIn 0.3s ease forwards;
+      position: relative;
+    }
+
+    .dark-mode .modal {
+      background: #1e1e1e;
+      color: #fff;
+    }
+
+    .modal h3 {
+      margin: 0 0 15px;
+      font-size: 22px;
+      color: #27ae60;
+      text-align: center;
+    }
+
+    .dark-mode .modal h3 {
+      color: #4ade80;
+    }
+
+    .modal p {
+      margin: 0 0 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .dark-mode .modal p {
+      color: #ddd;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .modal button {
+      display: inline-block;
+      margin: 0 5px;
+      padding: 10px 20px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .modal button:hover {
+      background: #219150;
+    }
+
+    .modal button.cancel {
+      background: #ccc;
+      color: #333;
+    }
+
+    .modal button.cancel:hover {
+      background: #bbb;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      to { transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 18px;
+      }
+
+      .toggle {
+        float: none;
+        display: block;
+        margin: 10px auto;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .header h2 {
+        font-size: 14px;
+      }
+
+      .modal {
+        width: 95%;
+        padding: 15px;
+      }
+
+      .modal h3 {
+        font-size: 18px;
+      }
+
+      .modal p {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Dialog Catatan -->
+  <div id="changelogModal" class="modal-overlay" onclick="if(event.target === this) closeChangelogModal()">
+    <div class="modal">
+      <h3>Catatan Perubahan</h3>
+      <p>🚀 ✨ 
+        Fitur Baru! Sekarang laporan PDF diunggah melalui backend. Fitur Unduh Semua Laporan telah dikembalikan dengan validasi NIPA. Input tanda tangan dihapus untuk mempermudah pengguna. Perbaikan ikon dark mode agar terender dengan benar.
+      </p>
+      <button onclick="closeChangelogModal()">Tutup</button>
+    </div>
+  </div>
+
+  <!-- Dialog untuk Input NIPA -->
+  <div id="nipaModal" class="modal-overlay" style="display: none;" onclick="if(event.target === this) closeNipaModal()">
+    <div class="modal">
+      <h3>Masukkan NIPA</h3>
+      <p>Masukkan NIPA Anda (13 digit angka) untuk mengunduh semua laporan.</p>
+      <input type="text" id="nipaInput" placeholder="Masukkan NIPA (13 digit)">
+      <button onclick="downloadAllLaporan()">Unduh</button>
+      <button class="cancel" onclick="closeNipaModal()">Batal</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <img src="https://i.ibb.co.com/990pWt7G/logo-kemenag-png-1png.png" alt="Logo Kemenag">
+      <h2>Kementerian Agama Republik Indonesia</h2>
+    </div>
+
+    <h1 style="font-size: 20px;">E-Laporan Penyuluh Agama Banyumas</h1>
+
+    <button id="darkModeToggle" class="toggle" aria-label="Toggle Tema">
+      <span id="themeIcon" class="material-symbols-outlined">brightness_7</span>
+    </button>
+
+    <form id="laporanForm">
+      <label>Nama</label>
+      <input type="text" id="nama" required>
+
+      <label>NIPA</label>
+      <input type="text" id="nipa" required>
+
+      <label>Bulan Pelaporan</label>
+      <select id="bulan" required>
+        <option value="Januari">Januari</option>
+        <option value="Februari">Februari</option>
+        <option value="Maret">Maret</option>
+        <option value="April">April</option>
+        <option value="Mei">Mei</option>
+        <option value="Juni">Juni</option>
+        <option value="Juli">Juli</option>
+        <option value="Agustus">Agustus</option>
+        <option value="September">September</option>
+        <option value="Oktober">Oktober</option>
+        <option value="November">November</option>
+        <option value="Desember">Desember</option>
+      </select>
+
+      <label>Tanggal Pelaksanaan</label>
+      <input type="date" id="tanggal" required>
+
+      <label>Materi</label>
+      <input type="text" id="materi" required>
+
+      <label>Kategori</label>
+      <select id="kategori" required>
+        <option value="Fiqh">Fiqh</option>
+        <option value="Akhlaq">Akhlaq</option>
+        <option value="Tauhid">Tauhid</option>
+        <option value="Muamalah">Muamalah</option>
+        <option value="Tarikh">Tarikh</option>
+        <option value="Tajwid">Tajwid</option>
+        <option value="Akidah">Akidah</option>
+        <option value="Qur'an Hadits">Qur'an Hadits</option>
+      </select>
+
+      <label>Jumlah Jamaah</label>
+      <input type="text" id="jamaah" required>
+
+      <label>Nama Kelompok</label>
+      <input type="text" id="kelompok" required>
+
+      <label>Tempat Pelaksanaan</label>
+      <input type="text" id="tempat" required>
+
+      <label>Foto Kegiatan</label>
+      <input type="file" id="foto" accept="image/*">
+
+      <button type="submit">Download PDF</button>
+      <button type="button" onclick="showNipaModal()">Unduh Semua Laporan</button>
+    </form>
+  </div>
+
+  <footer>
+    © 2025 Appandi Project
+    <a href="https://wa.me/6281915771171" target="_blank">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M16.001 4C9.925 4 5 8.925 5 15.001c0 2.624.855 5.047 2.285 7.015L5 28l6.216-2.242A11.952 11.952 0 0 0 16.001 26C22.075 26 27 21.075 27 15.001 27 8.925 22.075 4 16.001 4zm0 2c5.523 0 10 4.478 10 10.001 0 5.523-4.477 10-10 10-1.885 0-3.642-.55-5.123-1.492l-.358-.226-3.026 1.091 1.064-2.79-.23-.361A9.946 9.946 0 0 1 6 15.001C6 9.478 10.478 6 16.001 6zM9.7 10.965l-.206.004c-.576.02-1.13.506-1.237 1.073-.113.588-.205 1.134.27 2.018.646 1.192 2.195 3.04 4.93 4.334 2.736 1.294 3.474.884 4.068.832.596-.052 1.443-.59 1.654-1.16.211-.57.211-1.055.148-1.16-.063-.105-.23-.168-.484-.29-.254-.122-1.502-.742-1.733-.827-.231-.084-.399-.127-.567.127-.168.253-.653.825-.800.993-.147.168-.294.189-.548.063-.254-.126-1.072-.396-2.04-1.264-.754-.671-1.263-1.500-1.41-1.754-.147-.253-.016-.389.11-.512.113-.11.253-.294.38-.441.126-.147.168-.252.252-.421.084-.168.042-.316-.021-.441-.063-.126-.567-1.362-.775-1.859-.204-.495-.41-.52-.567-.526z"/></svg>
+    </a>
+    <br>
+    <small>This website is always under development, for criticism and suggestions please contact me.</small>
+  </footer>
+
+  <script>
+    // URL Backend
+    const API_URL = "https://epa-backend-production.up.railway.app";
+
+    // Fungsi untuk memvalidasi NIPA (13 digit angka)
+    function validateNIPA(nipa) {
+      return /^\d{13}$/.test(nipa);
+    }
+
+    // Fungsi untuk sanitasi nama file
+    function sanitizeFilename(name) {
+      return name.replace(/[^a-zA-Z0-9_-]/g, '_').replace(/_+/g, '_');
+    }
+
+    // Fungsi untuk mengunggah file ke backend
+    async function uploadToBackend(pdfBlob, filename) {
+      try {
+        const formData = new FormData();
+        formData.append('file', pdfBlob, filename);
+
+        console.log('Mengirim file ke backend:', filename);
+
+        const response = await fetch(`${API_URL}/api/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Gagal mengunggah file ke backend: ${response.status} - ${errorText}`);
+        }
+
+        const result = await response.json();
+        console.log('File uploaded:', result);
+      } catch (error) {
+        console.error('Error uploading to backend:', error.message);
+        alert(`Gagal mengunggah ke backend: ${error.message}. Silakan coba lagi.`);
+      }
+    }
+
+    // Fungsi untuk menampilkan dialog NIPA
+    function showNipaModal() {
+      const modal = document.getElementById('nipaModal');
+      const nipaInput = document.getElementById('nipaInput');
+      nipaInput.value = ''; // Reset input
+      modal.style.display = 'flex';
+    }
+
+    // Fungsi untuk menutup dialog NIPA
+    function closeNipaModal() {
+      document.getElementById('nipaModal').style.display = 'none';
+    }
+
+    // Fungsi untuk mengunduh semua laporan
+    async function downloadAllLaporan() {
+      const nipa = document.getElementById('nipaInput').value.trim();
+
+      // Validasi NIPA
+      if (!validateNIPA(nipa)) {
+        alert('NIPA harus berupa 13 digit angka.');
+        return;
+      }
+
+      try {
+        console.log(`Mengambil daftar file untuk NIPA: ${nipa}`);
+        const response = await fetch(`${API_URL}/api/download/${nipa}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Gagal mengambil file: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        if (data.status !== 'sukses' || !data.files || data.files.length === 0) {
+          alert('Tidak ada laporan ditemukan untuk NIPA ini.');
+          return;
+        }
+
+        console.log('Daftar file diterima:', data.files);
+
+        const zip = new JSZip();
+        const downloadPromises = data.files.map(async (file, index) => {
+          console.log(`Mengunduh file: ${file.name} dari ${file.downloadUrl}`);
+          const fileResponse = await fetch(file.downloadUrl);
+          if (!fileResponse.ok) {
+            throw new Error(`Gagal mengunduh file: ${file.name} - Status: ${fileResponse.status}`);
+          }
+          const fileBlob = await fileResponse.blob();
+          zip.file(file.name, fileBlob);
+        });
+
+        await Promise.all(downloadPromises);
+
+        console.log('Semua file berhasil diunduh, membuat ZIP...');
+        const content = await zip.generateAsync({ type: 'blob' });
+        saveAs(content, `Laporan_${nipa}.zip`);
+
+        closeNipaModal();
+      } catch (error) {
+        console.error('Error downloading files:', error.message);
+        alert(`Gagal mengunduh laporan: ${error.message}. Silakan coba lagi.`);
+      }
+    }
+
+    // Fungsi untuk menutup dialog catatan
+    function closeChangelogModal() {
+      console.log('Tombol Tutup diklik, menutup changelogModal');
+      const modal = document.getElementById('changelogModal');
+      if (modal) {
+        modal.style.display = 'none';
+      } else {
+        console.error('Elemen changelogModal tidak ditemukan');
+      }
+    }
+
+    // Script untuk Dark Mode dan Dialog
+    document.addEventListener("DOMContentLoaded", function () {
+      const toggle = document.getElementById("darkModeToggle");
+      const icon = document.getElementById("themeIcon");
+
+      function updateIcon() {
+        console.log('Mengupdate ikon dark mode...');
+        icon.textContent = document.body.classList.contains("dark-mode")
+          ? "dark_mode"
+          : "brightness_7";
+        // Fallback jika font tidak dimuat
+        if (!window.getComputedStyle(document.querySelector('.material-symbols-outlined')).fontFamily.includes('Material Symbols')) {
+          console.warn('Font Material Symbols tidak dimuat, menggunakan teks fallback.');
+          icon.textContent = document.body.classList.contains("dark-mode") ? "🌙" : "☀️";
+        }
+      }
+
+      toggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+        updateIcon();
+      });
+
+      updateIcon();
+
+      const changelogModal = document.getElementById('changelogModal');
+      if (changelogModal) {
+        changelogModal.style.display = 'flex';
+      } else {
+        console.error('Elemen changelogModal tidak ditemukan saat halaman dimuat');
+      }
+    });
+
+    // Script untuk Generate PDF dan Upload ke Backend
+    let fotoBase64 = null;
+
+    // Fungsi untuk mengonversi file ke base64
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("laporanForm");
+      const fotoInput = document.getElementById("foto");
+
+      // Tangani upload foto kegiatan
+      fotoInput.addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          try {
+            fotoBase64 = await fileToBase64(file);
+          } catch (error) {
+            console.error('Error converting photo:', error);
+            alert('Gagal memproses foto kegiatan.');
+          }
+        }
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        generatePDF();
+      });
+    });
+
+    function generatePDF() {
+      const nama = document.getElementById("nama").value.trim();
+      const nipa = document.getElementById("nipa").value.trim();
+      const bulan = document.getElementById("bulan").value;
+      const tanggal = document.getElementById("tanggal").value;
+      const materi = document.getElementById("materi").value;
+      const kategori = document.getElementById("kategori").value;
+      const jamaah = document.getElementById("jamaah").value;
+      const kelompok = document.getElementById("kelompok").value;
+      const tempat = document.getElementById("tempat").value;
+
+      // Validasi NIPA
+      if (!validateNIPA(nipa)) {
+        alert('NIPA harus berupa 13 digit angka.');
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF();
+
+      let y = 20;
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(16);
+      pdf.text("LAPORAN EPA", 105, y, { align: "center" });
+      y += 10;
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(12);
+      pdf.text("PENYULUH AGAMA ISLAM NON PNS", 105, y, { align: "center" });
+      y += 15;
+
+      const data = [
+        ["Nama", nama],
+        ["NIPA", nipa],
+        ["Bulan Pelaporan", bulan],
+        ["Tanggal Pelaksanaan", tanggal],
+        ["Materi", materi],
+        ["Kategori", kategori],
+        ["Jumlah Jamaah", jamaah],
+        ["Nama Kelompok", kelompok],
+        ["Tempat Pelaksanaan", tempat]
+      ];
+
+      data.forEach(([label, value]) => {
+        pdf.text(`${label}`, 20, y);
+        pdf.text(":", 70, y);
+        pdf.text(`${value}`, 75, y);
+        y += 8;
+      });
+
+      function savePDF() {
+        // Tambahkan bagian tanda tangan (hanya teks)
+        const ttdY = y + 20; // Jarak dari konten sebelumnya
+        pdf.text("Mengetahui,", 20, ttdY);
+        pdf.text("Atasan Langsung", 20, ttdY + 5);
+        pdf.text("Penyuluh Agama Islam", 140, ttdY);
+
+        // Tambahkan nama atasan dan penyuluh
+        pdf.text("Nastholih", 20, ttdY + 30); // Nama Atasan Langsung
+        pdf.text(nama, 140, ttdY + 30); // Nama Penyuluh Agama Islam (sama dengan input Nama)
+
+        const pdfBlob = pdf.output('blob');
+        const filename = `${sanitizeFilename(nama)}_${nipa}.pdf`;
+        uploadToBackend(pdfBlob, filename); // Kirim PDF ke backend
+        pdf.save(filename); // Simpan lokal
+      }
+
+      if (fotoBase64) {
+        const img = new Image();
+        img.onload = function () {
+          let imgProps = pdf.getImageProperties(fotoBase64);
+          let pdfWidth = 160;
+          let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          if (y + pdfHeight > 240) {
+            pdf.addPage();
+            y = 20;
+          } else {
+            y += 10;
+          }
+
+          pdf.setFont("helvetica", "bold");
+          pdf.text("Foto Kegiatan:", 20, y);
+          y += 5;
+          pdf.setFont("helvetica", "normal");
+          pdf.addImage(fotoBase64, 'JPEG', 20, y, pdfWidth, pdfHeight);
+          y += pdfHeight;
+          savePDF();
+        };
+        img.onerror = savePDF;
+        img.src = fotoBase64;
+      } else {
+        savePDF();
+      }
+    }
   </script>
+</body>
+</html>
