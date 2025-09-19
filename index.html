@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-Laporan Penyuluh Agama Banyumas</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <style>
     body { font-family: 'Arial', sans-serif; background:#f0f0f0; padding:20px; }
     .container { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:8px; }
@@ -15,16 +12,16 @@
     label { display:block; margin-top:10px; }
     input, textarea, select { width:100%; padding:8px; margin-top:4px; border:1px solid #ccc; border-radius:4px; }
     button { margin-top:20px; padding:10px 20px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer; }
+    #previewContainer { margin-top:30px; display:none; }
+    iframe { width:100%; height:600px; border:1px solid #ccc; border-radius:6px; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header" style="text-align:center; margin-bottom:20px;">
       <img src="https://i.ibb.co.com/990pWt7G/logo-kemenag-png-1png.png" width="50" alt="Logo">
-      <h2>Penyuluh Agama Islam</h2>
+      <h2>E-Laporan Penyuluh Agama Banyumas</h2>
     </div>
-
-    <h1>E-Laporan Penyuluh Agama Banyumas</h1>
 
     <form id="laporanForm">
       <label>Nama</label>
@@ -48,12 +45,20 @@
       <label>Foto Kegiatan</label>
       <input type="file" id="foto" accept="image/*">
 
-      <button type="submit">Download PDF</button>
+      <button type="submit">Buat & Preview PDF</button>
     </form>
+
+    <!-- Preview PDF -->
+    <div id="previewContainer">
+      <h3>Preview Laporan:</h3>
+      <iframe id="pdfPreview"></iframe>
+      <button id="downloadBtn">Download PDF</button>
+    </div>
   </div>
 
   <script>
     let fotoBase64 = null;
+    let lastPdfBlob = null; // untuk menyimpan PDF terbaru
 
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
@@ -71,10 +76,19 @@
 
     document.getElementById("laporanForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      generatePDF();
+      generatePDF(false); // false = hanya preview
     });
 
-    function generatePDF() {
+    document.getElementById("downloadBtn").addEventListener("click", function () {
+      if (lastPdfBlob) {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(lastPdfBlob);
+        link.download = `${document.getElementById("nama").value}_${document.getElementById("nip").value}.pdf`;
+        link.click();
+      }
+    });
+
+    function generatePDF(download = true) {
       const nama = document.getElementById("nama").value.trim();
       const nip = document.getElementById("nip").value.trim();
       const tanggal = document.getElementById("tanggal").value;
@@ -83,13 +97,9 @@
       const tempat = document.getElementById("tempat").value;
 
       const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF("p", "pt", "a4"); // ukuran A4 default
-      let y = 40;
+      const pdf = new jsPDF("p", "pt", "a4"); // A4 portrait
 
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(16);
-      pdf.text("LAPORAN EPA", 297.5, y, { align: "center" });
-      y += 20;
+      let y = 60;
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(12);
 
@@ -103,32 +113,47 @@
       ];
 
       data.forEach(([label, value]) => {
-        pdf.text(label, 40, y);
-        pdf.text(":", 150, y);
-        pdf.text(value, 160, y);
-        y += 18;
+        pdf.text(label, 60, y);
+        pdf.text(":", 180, y);
+        pdf.text(value, 200, y);
+        y += 20;
       });
 
-      // jika ada foto → fit full A4 (dengan margin tipis)
+      // Tambahkan foto di halaman baru
       if (fotoBase64) {
         const img = new Image();
         img.onload = function () {
+          pdf.addPage();
           const pageWidth = pdf.internal.pageSize.getWidth();
           const pageHeight = pdf.internal.pageSize.getHeight();
-          const margin = 20;
-          const usableWidth = pageWidth - margin * 2;
-          const usableHeight = pageHeight - margin * 2;
+          const margin = 30;
 
-          pdf.addPage();
-          pdf.text("Foto Kegiatan:", 40, 40);
-          pdf.addImage(fotoBase64, "JPEG", margin, 60, usableWidth, usableHeight - 80);
+          let imgWidth = pageWidth - margin * 2;
+          let imgHeight = (img.height * imgWidth) / img.width;
 
-          pdf.save(`${nama}_${nip}.pdf`);
+          if (imgHeight > pageHeight - margin * 2) {
+            imgHeight = pageHeight - margin * 2;
+            imgWidth = (img.width * imgHeight) / img.height;
+          }
+
+          pdf.text("Foto Kegiatan:", margin, 40);
+          pdf.addImage(fotoBase64, "JPEG", margin, 60, imgWidth, imgHeight);
+
+          showPreview(pdf, nama, nip);
+          if (download) pdf.save(`${nama}_${nip}.pdf`);
         };
         img.src = fotoBase64;
       } else {
-        pdf.save(`${nama}_${nip}.pdf`);
+        showPreview(pdf, nama, nip);
+        if (download) pdf.save(`${nama}_${nip}.pdf`);
       }
+    }
+
+    function showPreview(pdf, nama, nip) {
+      lastPdfBlob = pdf.output("blob");
+      const url = URL.createObjectURL(lastPdfBlob);
+      document.getElementById("pdfPreview").src = url;
+      document.getElementById("previewContainer").style.display = "block";
     }
   </script>
 </body>
