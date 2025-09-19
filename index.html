@@ -10,7 +10,7 @@
     .container { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:8px; }
     h1 { text-align:center; font-size:20px; margin-bottom:20px; }
     label { display:block; margin-top:10px; }
-    input, textarea, select { width:100%; padding:8px; margin-top:4px; border:1px solid #ccc; border-radius:4px; }
+    input { width:100%; padding:8px; margin-top:4px; border:1px solid #ccc; border-radius:4px; }
     button { margin-top:20px; padding:10px 20px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer; }
     #previewContainer { margin-top:30px; display:none; }
     iframe { width:100%; height:600px; border:1px solid #ccc; border-radius:6px; }
@@ -18,10 +18,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="header" style="text-align:center; margin-bottom:20px;">
-      <img src="https://i.ibb.co.com/990pWt7G/logo-kemenag-png-1png.png" width="50" alt="Logo">
-      <h2>E-Laporan Penyuluh Agama Banyumas</h2>
-    </div>
+    <h2 style="text-align:center">E-Laporan Penyuluh Agama Banyumas</h2>
 
     <form id="laporanForm">
       <label>Nama</label>
@@ -58,7 +55,7 @@
 
   <script>
     let fotoBase64 = null;
-    let lastPdfBlob = null; // untuk menyimpan PDF terbaru
+    let lastPdfBlob = null; // menyimpan PDF terakhir
 
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
@@ -76,7 +73,7 @@
 
     document.getElementById("laporanForm").addEventListener("submit", function (e) {
       e.preventDefault();
-      generatePDF(false); // false = hanya preview
+      generatePDF(false); // hanya preview
     });
 
     document.getElementById("downloadBtn").addEventListener("click", function () {
@@ -97,9 +94,9 @@
       const tempat = document.getElementById("tempat").value;
 
       const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF("p", "pt", "a4"); // A4 portrait
+      const pdf = new jsPDF("p", "pt", "a4");
 
-      let y = 60;
+      let y = 40;
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(12);
 
@@ -113,43 +110,45 @@
       ];
 
       data.forEach(([label, value]) => {
-        pdf.text(label, 60, y);
-        pdf.text(":", 180, y);
-        pdf.text(value, 200, y);
-        y += 20;
+        pdf.text(label, 40, y);
+        pdf.text(":", 150, y);
+        pdf.text(value, 170, y);
+        y += 18;
       });
 
-      // Tambahkan foto di halaman baru
       if (fotoBase64) {
         const img = new Image();
         img.onload = function () {
-          pdf.addPage();
           const pageWidth = pdf.internal.pageSize.getWidth();
           const pageHeight = pdf.internal.pageSize.getHeight();
           const margin = 30;
 
+          // sisa ruang setelah teks
+          const availableHeight = pageHeight - y - margin;
+
+          // scale foto agar muat
           let imgWidth = pageWidth - margin * 2;
           let imgHeight = (img.height * imgWidth) / img.width;
 
-          if (imgHeight > pageHeight - margin * 2) {
-            imgHeight = pageHeight - margin * 2;
+          if (imgHeight > availableHeight) {
+            imgHeight = availableHeight;
             imgWidth = (img.width * imgHeight) / img.height;
           }
 
-          pdf.text("Foto Kegiatan:", margin, 40);
-          pdf.addImage(fotoBase64, "JPEG", margin, 60, imgWidth, imgHeight);
+          pdf.text("Foto Kegiatan:", 40, y + 10);
+          pdf.addImage(fotoBase64, "JPEG", margin, y + 30, imgWidth, imgHeight);
 
-          showPreview(pdf, nama, nip);
+          showPreview(pdf);
           if (download) pdf.save(`${nama}_${nip}.pdf`);
         };
         img.src = fotoBase64;
       } else {
-        showPreview(pdf, nama, nip);
+        showPreview(pdf);
         if (download) pdf.save(`${nama}_${nip}.pdf`);
       }
     }
 
-    function showPreview(pdf, nama, nip) {
+    function showPreview(pdf) {
       lastPdfBlob = pdf.output("blob");
       const url = URL.createObjectURL(lastPdfBlob);
       document.getElementById("pdfPreview").src = url;
