@@ -9,432 +9,35 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f0f0f0;
-      padding: 20px;
-      color: #000;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    .dark-mode {
-      background-color: #121212;
-      color: #fff;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      transition: background 0.3s;
-    }
-
-    .dark-mode .container {
-      background-color: #1e1e1e;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 20px;
-    }
-
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 4px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .dark-mode input,
-    .dark-mode select,
-    .dark-mode textarea {
-      background-color: #2e2e2e;
-      color: #fff;
-      border-color: #444;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: transparent;
-      color: #27ae60;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button[type="submit"] {
-      background-color: #27ae60;
-      color: white;
-    }
-
-    button:hover {
-      background-color: transparent;
-      color: #219150;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #219150;
-      color: white;
-    }
-
-    .toggle {
-      background: none;
-      border: none;
-      cursor: pointer;
-      float: right;
-      margin-top: -70px;
-      font-size: 24px;
-      transition: transform 0.3s ease;
-      color: inherit;
-    }
-
-    .toggle.material-symbols-outlined {
-      font-size: 28px;
-      transition: transform 0.3s ease;
-    }
-
-    .dark-mode .toggle.material-symbols-outlined {
-      color: #fff;
-    }
-
-    .toggle:hover.material-symbols-outlined {
-      transform: rotate(180deg);
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .header img {
-      width: 50px;
-    }
-
-    .header h2 {
-      margin: 0;
-      font-size: 16px;
-      flex: 1;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 14px;
-      color: #888;
-    }
-
-    .dark-mode footer {
-      color: #bbb;
-    }
-
-    footer svg {
-      vertical-align: middle;
-      margin-left: 6px;
-      height: 16px;
-      width: 16px;
-      fill: #25D366;
-    }
-
-    /* CSS untuk Dialog Catatan dan Dialog NIPA */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      opacity: 0;
-      animation: fadeIn 0.3s ease forwards;
-    }
-
-    .modal-overlay[style*="display: none"] {
-      display: none !important;
-    }
-
-    .modal {
-      background: white;
-      max-width: 500px;
-      width: 90%;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transform: translateY(-20px);
-      animation: slideIn 0.3s ease forwards;
-      position: relative;
-    }
-
-    .dark-mode .modal {
-      background: #1e1e1e;
-      color: #fff;
-    }
-
-    .modal h3 {
-      margin: 0 0 15px;
-      font-size: 22px;
-      color: #27ae60;
-      text-align: center;
-    }
-
-    .dark-mode .modal h3 {
-      color: #4ade80;
-    }
-
-    .modal p {
-      margin: 0 0 20px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: #333;
-    }
-
-    .dark-mode .modal p {
-      color: #ddd;
-    }
-
-    .modal input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .modal button {
-      display: inline-block;
-      margin: 0 5px;
-      padding: 10px 20px;
-      background: #27ae60;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s;
-    }
-
-    .modal button:hover {
-      background: #219150;
-    }
-
-    .modal button.cancel {
-      background: #ccc;
-      color: #333;
-    }
-
-    .modal button.cancel:hover {
-      background: #bbb;
-    }
-
-    /* CSS untuk Loading Screen */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-
-    .loading-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid transparent;
-      border-top: 5px solid #27ae60;
-      border-right: 5px solid #4ade80;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    .loading-text {
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    @keyframes slideIn {
-      to { transform: translateY(0); }
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 15px;
-      }
-
-      h1 {
-        font-size: 18px;
-      }
-
-      .toggle {
-        float: none;
-        display: block;
-        margin: 10px auto;
-      }
-
-      button {
-        width: 100%;
-      }
-
-      .header {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .header h2 {
-        font-size: 14px;
-      }
-
-      .modal {
-        width: 95%;
-        padding: 15px;
-      }
-
-      .modal h3 {
-        font-size: 18px;
-      }
-
-      .modal p {
-        font-size: 13px;
-      }
-
-      .loading-text {
-        font-size: 16px;
-      }
-    }
+    body { font-family: 'Arial', sans-serif; background:#f0f0f0; padding:20px; }
+    .container { max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:8px; }
+    h1 { text-align:center; font-size:20px; margin-bottom:20px; }
+    label { display:block; margin-top:10px; }
+    input, textarea, select { width:100%; padding:8px; margin-top:4px; border:1px solid #ccc; border-radius:4px; }
+    button { margin-top:20px; padding:10px 20px; background:#27ae60; color:white; border:none; border-radius:4px; cursor:pointer; }
   </style>
 </head>
 <body>
-  <!-- Dialog Catatan -->
-  <div id="changelogModal" class="modal-overlay" onclick="if(event.target === this) closeChangelogModal()">
-    <div class="modal">
-      <h3>Catatan Perubahan</h3>
-      <p>🚀 ✨ 
-        Fitur Baru! Sekarang laporan PDF diunggah melalui backend. Fitur Unduh Semua Laporan telah dikembalikan dengan validasi NIPA. Input tanda tangan dihapus untuk mempermudah pengguna. Perbaikan ikon dark mode agar terender dengan benar. Menambahkan loading screen saat upload ke Drive.
-      </p>
-      <button onclick="closeChangelogModal()">Tutup</button>
-    </div>
-  </div>
-
-  <!-- Dialog untuk Input NIPA -->
-  <div id="nipaModal" class="modal-overlay" style="display: none;" onclick="if(event.target === this) closeNipaModal()">
-    <div class="modal">
-      <h3>Masukkan NIPA</h3>
-      <p>Masukkan NIPA Anda (13 digit angka) untuk mengunduh semua laporan.</p>
-      <input type="text" id="nipaInput" placeholder="Masukkan NIPA (13 digit)">
-      <button onclick="downloadAllLaporan()">Unduh</button>
-      <button class="cancel" onclick="closeNipaModal()">Batal</button>
-    </div>
-  </div>
-
-  <!-- Loading Screen -->
-  <div id="loadingOverlay" class="loading-overlay">
-    <div class="loading-content">
-      <div class="spinner"></div>
-      <div class="loading-text">Mengunggah ke Drive...</div>
-    </div>
-  </div>
-
   <div class="container">
-    <div class="header">
-      <img src="https://i.ibb.co.com/990pWt7G/logo-kemenag-png-1png.png" alt="Logo Kemenag">
-      <h2>Kementerian Agama Republik Indonesia</h2>
+    <div class="header" style="text-align:center; margin-bottom:20px;">
+      <img src="https://i.ibb.co.com/990pWt7G/logo-kemenag-png-1png.png" width="50" alt="Logo">
+      <h2>Penyuluh Agama Islam</h2>
     </div>
 
-    <h1 style="font-size: 20px;">E-Laporan Penyuluh Agama Banyumas</h1>
-
-    <button id="darkModeToggle" class="toggle" aria-label="Toggle Tema">
-      <span id="themeIcon" class="material-symbols-outlined">brightness_7</span>
-    </button>
+    <h1>E-Laporan Penyuluh Agama Banyumas</h1>
 
     <form id="laporanForm">
       <label>Nama</label>
       <input type="text" id="nama" required>
 
-      <label>NIPA</label>
-      <input type="text" id="nipa" required>
-
-      <label>Bulan Pelaporan</label>
-      <select id="bulan" required>
-        <option value="Januari">Januari</option>
-        <option value="Februari">Februari</option>
-        <option value="Maret">Maret</option>
-        <option value="April">April</option>
-        <option value="Mei">Mei</option>
-        <option value="Juni">Juni</option>
-        <option value="Juli">Juli</option>
-        <option value="Agustus">Agustus</option>
-        <option value="September">September</option>
-        <option value="Oktober">Oktober</option>
-        <option value="November">November</option>
-        <option value="Desember">Desember</option>
-      </select>
+      <label>NIP</label>
+      <input type="text" id="nip" required>
 
       <label>Tanggal Pelaksanaan</label>
       <input type="date" id="tanggal" required>
 
       <label>Materi</label>
       <input type="text" id="materi" required>
-
-      <label>Kategori</label>
-      <select id="kategori" required>
-        <option value="Fiqh">Fiqh</option>
-        <option value="Akhlaq">Akhlaq</option>
-        <option value="Tauhid">Tauhid</option>
-        <option value="Muamalah">Muamalah</option>
-        <option value="Tarikh">Tarikh</option>
-        <option value="Tajwid">Tajwid</option>
-        <option value="Akidah">Akidah</option>
-        <option value="Qur'an Hadits">Qur'an Hadits</option>
-      </select>
-
-      <label>Jumlah Jamaah</label>
-      <input type="text" id="jamaah" required>
 
       <label>Nama Kelompok</label>
       <input type="text" id="kelompok" required>
@@ -446,183 +49,12 @@
       <input type="file" id="foto" accept="image/*">
 
       <button type="submit">Download PDF</button>
-      <button type="button" onclick="showNipaModal()">Unduh Semua Laporan</button>
     </form>
   </div>
 
-  <footer>
-    © 2025 Appandi Project
-    <a href="https://wa.me/6281915771171" target="_blank">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M16.001 4C9.925 4 5 8.925 5 15.001c0 2.624.855 5.047 2.285 7.015L5 28l6.216-2.242A11.952 11.952 0 0 0 16.001 26C22.075 26 27 21.075 27 15.001 27 8.925 22.075 4 16.001 4zm0 2c5.523 0 10 4.478 10 10.001 0 5.523-4.477 10-10 10-1.885 0-3.642-.55-5.123-1.492l-.358-.226-3.026 1.091 1.064-2.79-.23-.361A9.946 9.946 0 0 1 6 15.001C6 9.478 10.478 6 16.001 6zM9.7 10.965l-.206.004c-.576.02-1.13.506-1.237 1.073-.113.588-.205 1.134.27 2.018.646 1.192 2.195 3.04 4.93 4.334 2.736 1.294 3.474.884 4.068.832.596-.052 1.443-.59 1.654-1.16.211-.57.211-1.055.148-1.16-.063-.105-.23-.168-.484-.29-.254-.122-1.502-.742-1.733-.827-.231-.084-.399-.127-.567.127-.168.253-.653.825-.800.993-.147.168-.294.189-.548.063-.254-.126-1.072-.396-2.04-1.264-.754-.671-1.263-1.500-1.41-1.754-.147-.253-.016-.389.11-.512.113-.11.253-.294.38-.441.126-.147.168-.252.252-.421.084-.168.042-.316-.021-.441-.063-.126-.567-1.362-.775-1.859-.204-.495-.41-.52-.567-.526z"/></svg>
-    </a>
-    <br>
-    <small>This website is always under development, for criticism and suggestions please contact me.</small>
-  </footer>
-
   <script>
-    // URL Backend
-    const API_URL = "https://epa-backend-production.up.railway.app";
-
-    // Fungsi untuk memvalidasi NIPA (13 digit angka)
-    function validateNIPA(nipa) {
-      return /^\d{13}$/.test(nipa);
-    }
-
-    // Fungsi untuk sanitasi nama file
-    function sanitizeFilename(name) {
-      return name.replace(/[^a-zA-Z0-9_-]/g, '_').replace(/_+/g, '_');
-    }
-
-    // Fungsi untuk menampilkan loading screen
-    function showLoading() {
-      document.getElementById('loadingOverlay').style.display = 'flex';
-    }
-
-    // Fungsi untuk menyembunyikan loading screen
-    function hideLoading() {
-      document.getElementById('loadingOverlay').style.display = 'none';
-    }
-
-    // Fungsi untuk mengunggah file ke backend
-    async function uploadToBackend(pdfBlob, filename) {
-      try {
-        showLoading(); // Tampilkan loading screen sebelum upload
-
-        const formData = new FormData();
-        formData.append('file', pdfBlob, filename);
-
-        console.log('Mengirim file ke backend:', filename);
-
-        const response = await fetch(`${API_URL}/api/upload`, {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Gagal mengunggah file ke backend: ${response.status} - ${errorText}`);
-        }
-
-        const result = await response.json();
-        console.log('File uploaded:', result);
-      } catch (error) {
-        console.error('Error uploading to backend:', error.message);
-        alert(`Gagal mengunggah ke backend: ${error.message}. Silakan coba lagi.`);
-      } finally {
-        hideLoading(); // Sembunyikan loading screen setelah upload selesai
-      }
-    }
-
-    // Fungsi untuk menampilkan dialog NIPA
-    function showNipaModal() {
-      const modal = document.getElementById('nipaModal');
-      const nipaInput = document.getElementById('nipaInput');
-      nipaInput.value = ''; // Reset input
-      modal.style.display = 'flex';
-    }
-
-    // Fungsi untuk menutup dialog NIPA
-    function closeNipaModal() {
-      document.getElementById('nipaModal').style.display = 'none';
-    }
-
-    // Fungsi untuk mengunduh semua laporan
-    async function downloadAllLaporan() {
-      const nipa = document.getElementById('nipaInput').value.trim();
-
-      // Validasi NIPA
-      if (!validateNIPA(nipa)) {
-        alert('NIPA harus berupa 13 digit angka.');
-        return;
-      }
-
-      try {
-        console.log(`Mengambil daftar file untuk NIPA: ${nipa}`);
-        const response = await fetch(`${API_URL}/api/download/${nipa}`);
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Gagal mengambil file: ${response.status} - ${errorText}`);
-        }
-
-        const data = await response.json();
-        if (data.status !== 'sukses' || !data.files || data.files.length === 0) {
-          alert('Tidak ada laporan ditemukan untuk NIPA ini.');
-          return;
-        }
-
-        console.log('Daftar file diterima:', data.files);
-
-        const zip = new JSZip();
-        const downloadPromises = data.files.map(async (file, index) => {
-          console.log(`Mengunduh file: ${file.name} dari ${file.downloadUrl}`);
-          const fileResponse = await fetch(file.downloadUrl);
-          if (!fileResponse.ok) {
-            throw new Error(`Gagal mengunduh file: ${file.name} - Status: ${fileResponse.status}`);
-          }
-          const fileBlob = await fileResponse.blob();
-          zip.file(file.name, fileBlob);
-        });
-
-        await Promise.all(downloadPromises);
-
-        console.log('Semua file berhasil diunduh, membuat ZIP...');
-        const content = await zip.generateAsync({ type: 'blob' });
-        saveAs(content, `Laporan_${nipa}.zip`);
-
-        closeNipaModal();
-      } catch (error) {
-        console.error('Error downloading files:', error.message);
-        alert(`Gagal mengunduh laporan: ${error.message}. Silakan coba lagi.`);
-      }
-    }
-
-    // Fungsi untuk menutup dialog catatan
-    function closeChangelogModal() {
-      console.log('Tombol Tutup diklik, menutup changelogModal');
-      const modal = document.getElementById('changelogModal');
-      if (modal) {
-        modal.style.display = 'none';
-      } else {
-        console.error('Elemen changelogModal tidak ditemukan');
-      }
-    }
-
-    // Script untuk Dark Mode dan Dialog
-    document.addEventListener("DOMContentLoaded", function () {
-      const toggle = document.getElementById("darkModeToggle");
-      const icon = document.getElementById("themeIcon");
-
-      function updateIcon() {
-        console.log('Mengupdate ikon dark mode...');
-        icon.textContent = document.body.classList.contains("dark-mode")
-          ? "dark_mode"
-          : "brightness_7";
-        // Fallback jika font tidak dimuat
-        if (!window.getComputedStyle(document.querySelector('.material-symbols-outlined')).fontFamily.includes('Material Symbols')) {
-          console.warn('Font Material Symbols tidak dimuat, menggunakan teks fallback.');
-          icon.textContent = document.body.classList.contains("dark-mode") ? "🌙" : "☀️";
-        }
-      }
-
-      toggle.addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-        updateIcon();
-      });
-
-      updateIcon();
-
-      const changelogModal = document.getElementById('changelogModal');
-      if (changelogModal) {
-        changelogModal.style.display = 'flex';
-      } else {
-        console.error('Elemen changelogModal tidak ditemukan saat halaman dimuat');
-      }
-    });
-
-    // Script untuk Generate PDF dan Upload ke Backend
     let fotoBase64 = null;
 
-    // Fungsi untuk mengonversi file ke base64
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -632,124 +64,70 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("laporanForm");
-      const fotoInput = document.getElementById("foto");
+    document.getElementById("foto").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (file) fotoBase64 = await fileToBase64(file);
+    });
 
-      // Tangani upload foto kegiatan
-      fotoInput.addEventListener("change", async (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          try {
-            fotoBase64 = await fileToBase64(file);
-          } catch (error) {
-            console.error('Error converting photo:', error);
-            alert('Gagal memproses foto kegiatan.');
-          }
-        }
-      });
-
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        generatePDF();
-      });
+    document.getElementById("laporanForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      generatePDF();
     });
 
     function generatePDF() {
       const nama = document.getElementById("nama").value.trim();
-      const nipa = document.getElementById("nipa").value.trim();
-      const bulan = document.getElementById("bulan").value;
+      const nip = document.getElementById("nip").value.trim();
       const tanggal = document.getElementById("tanggal").value;
       const materi = document.getElementById("materi").value;
-      const kategori = document.getElementById("kategori").value;
-      const jamaah = document.getElementById("jamaah").value;
       const kelompok = document.getElementById("kelompok").value;
       const tempat = document.getElementById("tempat").value;
 
-      // Validasi NIPA
-      if (!validateNIPA(nipa)) {
-        alert('NIPA harus berupa 13 digit angka.');
-        return;
-      }
-
       const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF();
+      const pdf = new jsPDF("p", "pt", "a4"); // ukuran A4 default
+      let y = 40;
 
-      let y = 20;
       pdf.setFont("helvetica", "bold");
       pdf.setFontSize(16);
-      pdf.text("LAPORAN EPA", 105, y, { align: "center" });
-      y += 10;
+      pdf.text("LAPORAN EPA", 297.5, y, { align: "center" });
+      y += 20;
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(12);
-      pdf.text("PENYULUH AGAMA ISLAM NON PNS", 105, y, { align: "center" });
-      y += 15;
 
       const data = [
         ["Nama", nama],
-        ["NIPA", nipa],
-        ["Bulan Pelaporan", bulan],
+        ["NIP", nip],
         ["Tanggal Pelaksanaan", tanggal],
         ["Materi", materi],
-        ["Kategori", kategori],
-        ["Jumlah Jamaah", jamaah],
         ["Nama Kelompok", kelompok],
         ["Tempat Pelaksanaan", tempat]
       ];
 
       data.forEach(([label, value]) => {
-        pdf.text(`${label}`, 20, y);
-        pdf.text(":", 70, y);
-        pdf.text(`${value}`, 75, y);
-        y += 8;
+        pdf.text(label, 40, y);
+        pdf.text(":", 150, y);
+        pdf.text(value, 160, y);
+        y += 18;
       });
 
-      function savePDF() {
-        // Tambahkan bagian tanda tangan (hanya teks)
-        const ttdY = y + 20; // Jarak dari konten sebelumnya
-        pdf.text("Mengetahui,", 20, ttdY);
-        pdf.text("Atasan Langsung", 20, ttdY + 5);
-        pdf.text("Penyuluh Agama Islam", 140, ttdY);
-
-        // Tambahkan nama atasan dan NIP
-        pdf.text("H. M. Nastholih, S.Ag., M.Pd.I", 20, ttdY + 30); // Nama Atasan Langsung
-        pdf.setFontSize(10);
-        pdf.text("NIP. 19720419 199703 1 003", 20, ttdY + 38); // NIP Atasan Langsung
-        pdf.setFontSize(12);
-        pdf.text(nama, 140, ttdY + 30); // Nama Penyuluh Agama Islam (sama dengan input Nama)
-
-        const pdfBlob = pdf.output('blob');
-        const filename = `${sanitizeFilename(nama)}_${nipa}.pdf`;
-        uploadToBackend(pdfBlob, filename); // Kirim PDF ke backend
-        pdf.save(filename); // Simpan lokal
-      }
-
+      // jika ada foto → fit full A4 (dengan margin tipis)
       if (fotoBase64) {
         const img = new Image();
         img.onload = function () {
-          let imgProps = pdf.getImageProperties(fotoBase64);
-          let pdfWidth = 160;
-          let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+          const margin = 20;
+          const usableWidth = pageWidth - margin * 2;
+          const usableHeight = pageHeight - margin * 2;
 
-          if (y + pdfHeight > 240) {
-            pdf.addPage();
-            y = 20;
-          } else {
-            y += 10;
-          }
+          pdf.addPage();
+          pdf.text("Foto Kegiatan:", 40, 40);
+          pdf.addImage(fotoBase64, "JPEG", margin, 60, usableWidth, usableHeight - 80);
 
-          pdf.setFont("helvetica", "bold");
-          pdf.text("Foto Kegiatan:", 20, y);
-          y += 5;
-          pdf.setFont("helvetica", "normal");
-          pdf.addImage(fotoBase64, 'JPEG', 20, y, pdfWidth, pdfHeight);
-          y += pdfHeight;
-          savePDF();
+          pdf.save(`${nama}_${nip}.pdf`);
         };
-        img.onerror = savePDF;
         img.src = fotoBase64;
       } else {
-        savePDF();
+        pdf.save(`${nama}_${nip}.pdf`);
       }
     }
   </script>
